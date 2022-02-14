@@ -1,0 +1,14 @@
+2022-02-14 20:56:39,151 [Worker-5: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2022-02-14 21:03:01,514 [Worker-23: Importing Maven projects] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.oguzhanturk:rentacar:0.0.1-SNAPSHOT @ /home/oguzhan/dev/Workspaces/eclipse-workspace-17/RentACarProject/rentacar/pom.xml.
+2022-02-14 21:03:02,668 [Worker-23: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /rentacar/src/main/java
+2022-02-14 21:03:02,669 [Worker-23: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /rentacar/src/main/resources
+2022-02-14 21:03:02,673 [Worker-23: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /rentacar/src/main/resources
+2022-02-14 21:03:02,676 [Worker-23: Importing Maven projects] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /rentacar/src/test/java
+2022-02-14 21:03:03,675 [Worker-23: Importing Maven projects] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Imported and configured 1 project(s) in 3 sec
+2022-02-14 21:03:05,479 [Worker-22: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-02-14 21:03:05,479 [Worker-22: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
+2022-02-14 21:03:05,482 [Worker-22: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-02-14 21:03:05,502 [Worker-22: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-02-14 21:03:05,504 [Worker-22: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-02-14 21:03:05,504 [Worker-22: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
+2022-02-14 21:03:05,505 [Worker-22: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /home/oguzhan/dev/Workspaces/eclipse-workspace-17/RentACarProject/rentacar/src/test/resources
