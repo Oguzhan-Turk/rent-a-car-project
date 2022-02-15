@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.ColorService;
 import com.oguzhanturk.rentacar.business.dtos.ListColorDto;
@@ -13,6 +14,7 @@ import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.dataAccess.abstracts.ColorDao;
 import com.oguzhanturk.rentacar.entities.concretes.Color;
 
+@Service
 public class ColorManager implements ColorService {
 
 	private ColorDao colorDao;
@@ -26,16 +28,15 @@ public class ColorManager implements ColorService {
 
 	@Override
 	public List<ListColorDto> getAll() {
-		List<Color> result = this.colorDao.findAll();
+		List<Color> result = colorDao.findAll();
 		List<ListColorDto> response = result.stream()
-				.map(color -> this.modelMapperService.forDto().map(color, ListColorDto.class))
-				.collect(Collectors.toList());
+				.map(color -> modelMapperService.forDto().map(color, ListColorDto.class)).collect(Collectors.toList());
 		return response;
 	}
 
 	@Override
 	public void add(CreateColorRequest createColorRequest) {
-		Color color = this.modelMapperService.forRequest().map(createColorRequest, Color.class);
+		Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
 		if (!doesExist(color)) {
 			colorDao.save(color);
 		}
@@ -49,7 +50,7 @@ public class ColorManager implements ColorService {
 	}
 
 	private boolean doesExist(Color color) {
-		return Objects.nonNull(colorDao.existByColorName(color.getColorName()));
+		return Objects.nonNull(colorDao.getByColorName(color.getColorName()));
 	}
 
 }
