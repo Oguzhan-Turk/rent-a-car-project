@@ -8,5 +8,5 @@ import com.oguzhanturk.rentacar.entities.concretes.Brand;
 @Repository
 public interface BrandDao extends JpaRepository<Brand, Integer> {
 
-	Brand existByBrandName(String brandName);
+	Brand getByBrandName(String name);
 }

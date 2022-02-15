@@ -8,5 +8,5 @@ import com.oguzhanturk.rentacar.entities.concretes.Color;
 @Repository
 public interface ColorDao extends JpaRepository<Color, Integer> {
 
-	Color existByColorName(String colorName);
+	Color getByColorName(String name);
 }
