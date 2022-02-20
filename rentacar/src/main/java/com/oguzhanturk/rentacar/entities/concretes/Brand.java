@@ -26,7 +26,7 @@ public class Brand {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "brand_id")
 	private int brandId;
-	@Column(name = "brand_name")
+	@Column(name = "brand_name", unique = true)
 	private String brandName;
 
 	@OneToMany
