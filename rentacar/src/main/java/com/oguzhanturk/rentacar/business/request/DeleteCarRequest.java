@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateBrandRequest {
+public class DeleteCarRequest {
 
-	private String brandName;
+	private int carId;
 
 }
