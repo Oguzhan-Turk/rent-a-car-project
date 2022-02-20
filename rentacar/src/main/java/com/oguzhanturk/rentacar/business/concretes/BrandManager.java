@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.BrandService;
+import com.oguzhanturk.rentacar.business.dtos.BrandDto;
 import com.oguzhanturk.rentacar.business.dtos.ListBrandDto;
 import com.oguzhanturk.rentacar.business.request.CreateBrandRequest;
+import com.oguzhanturk.rentacar.business.request.DeleteBrandRequest;
+import com.oguzhanturk.rentacar.business.request.UpdateBrandRequest;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.dataAccess.abstracts.BrandDao;
 import com.oguzhanturk.rentacar.entities.concretes.Brand;
@@ -17,8 +20,8 @@ import com.oguzhanturk.rentacar.entities.concretes.Brand;
 @Service
 public class BrandManager implements BrandService {
 
-	private BrandDao brandDao;
-	private ModelMapperService modelMapperService;
+	private final BrandDao brandDao;
+	private final ModelMapperService modelMapperService;
 
 	@Autowired
 	public BrandManager(BrandDao brandDao, ModelMapperService modelMapperService) {
@@ -37,21 +40,37 @@ public class BrandManager implements BrandService {
 	@Override
 	public void add(CreateBrandRequest createBrandRequest) {
 		Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
-		if (!doesExist(brand)) {
+		if (!existsByBrandName(brand)) {
 			brandDao.save(brand);
 		}
 
 	}
 
 	@Override
-	public ListBrandDto getById(int id) {
+	public BrandDto getById(int id) {
 		Brand brand = brandDao.getById(id);
-		ListBrandDto response = modelMapperService.forDto().map(brand, ListBrandDto.class);
+		BrandDto response = modelMapperService.forDto().map(brand, BrandDto.class);
 		return response;
 	}
 
-	private boolean doesExist(Brand brand) {
+	@Override
+	public void delete(DeleteBrandRequest deleteBrandRequest) {
+		if (brandDao.existsById(deleteBrandRequest.getBrandId())) {
+			brandDao.deleteById(deleteBrandRequest.getBrandId());
+		}
 
+	}
+
+	@Override
+	public void update(UpdateBrandRequest updateBrandRequest) {
+		if (brandDao.existsById(updateBrandRequest.getBrandId())) {
+			Brand brand = modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
+			brandDao.save(brand);
+		}
+
+	}
+
+	private boolean existsByBrandName(Brand brand) {
 		return Objects.nonNull(brandDao.getByBrandName(brand.getBrandName()));
 	}
 

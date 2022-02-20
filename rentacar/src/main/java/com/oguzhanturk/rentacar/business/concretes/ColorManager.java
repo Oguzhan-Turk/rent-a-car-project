@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.ColorService;
+import com.oguzhanturk.rentacar.business.dtos.ColorDto;
 import com.oguzhanturk.rentacar.business.dtos.ListColorDto;
 import com.oguzhanturk.rentacar.business.request.CreateColorRequest;
+import com.oguzhanturk.rentacar.business.request.DeleteColorRequest;
+import com.oguzhanturk.rentacar.business.request.UpdateColorRequest;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.dataAccess.abstracts.ColorDao;
 import com.oguzhanturk.rentacar.entities.concretes.Color;
@@ -17,8 +20,8 @@ import com.oguzhanturk.rentacar.entities.concretes.Color;
 @Service
 public class ColorManager implements ColorService {
 
-	private ColorDao colorDao;
-	private ModelMapperService modelMapperService;
+	private final ColorDao colorDao;
+	private final ModelMapperService modelMapperService;
 
 	@Autowired
 	public ColorManager(ColorDao colorDao, ModelMapperService modelMapperService) {
@@ -35,21 +38,41 @@ public class ColorManager implements ColorService {
 	}
 
 	@Override
-	public void add(CreateColorRequest createColorRequest) {
+	public ColorDto add(CreateColorRequest createColorRequest) {
 		Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
-		if (!doesExist(color)) {
-			colorDao.save(color);
+		Color result = null;
+		if (!existsByColorName(color)) {
+			result = colorDao.save(color);
 		}
+		return modelMapperService.forDto().map(result, ColorDto.class);
+
 	}
 
 	@Override
-	public ListColorDto getById(int id) {
+	public ColorDto getById(int id) {
 		Color color = colorDao.getById(id);
-		ListColorDto response = modelMapperService.forDto().map(color, ListColorDto.class);
+		ColorDto response = modelMapperService.forDto().map(color, ColorDto.class);
 		return response;
 	}
 
-	private boolean doesExist(Color color) {
+	@Override
+	public void delete(DeleteColorRequest deleteColorRequest) {
+		if (colorDao.existsById(deleteColorRequest.getColorId())) {
+			colorDao.deleteById(deleteColorRequest.getColorId());
+		}
+
+	}
+
+	@Override
+	public void update(UpdateColorRequest updateColorRequest) {
+		if (colorDao.existsById(updateColorRequest.getColorId())) {
+			Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
+			colorDao.save(color);
+		}
+
+	}
+
+	private boolean existsByColorName(Color color) {
 		return Objects.nonNull(colorDao.getByColorName(color.getColorName()));
 	}
 
