@@ -9,15 +9,15 @@ import com.oguzhanturk.rentacar.business.request.DeleteBrandRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateBrandRequest;
 
 public interface BrandService {
+	
+	List<ListBrandDto> getAll();
+
+	BrandDto getById(int id);
 
 	void add(CreateBrandRequest createBrandRequest);
 
 	void update(UpdateBrandRequest updateBrandRequest);
 
 	void delete(DeleteBrandRequest deleteBrandRequest);
-
-	List<ListBrandDto> getAll();
-
-	BrandDto getById(int id);
 
 }
