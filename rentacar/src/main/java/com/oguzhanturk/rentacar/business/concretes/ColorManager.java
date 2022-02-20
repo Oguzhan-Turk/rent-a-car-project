@@ -39,12 +39,12 @@ public class ColorManager implements ColorService {
 
 	@Override
 	public ColorDto add(CreateColorRequest createColorRequest) {
-		Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
-		Color result = null;
-		if (!existsByColorName(color)) {
-			result = colorDao.save(color);
+		Color found = null;
+		if (!colorDao.existsByColorName(createColorRequest.getColorName())) {
+			Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
+			found = colorDao.save(color);
 		}
-		return modelMapperService.forDto().map(result, ColorDto.class);
+		return modelMapperService.forDto().map(found, ColorDto.class);
 
 	}
 
@@ -70,10 +70,6 @@ public class ColorManager implements ColorService {
 			colorDao.save(color);
 		}
 
-	}
-
-	private boolean existsByColorName(Color color) {
-		return Objects.nonNull(colorDao.getByColorName(color.getColorName()));
 	}
 
 }

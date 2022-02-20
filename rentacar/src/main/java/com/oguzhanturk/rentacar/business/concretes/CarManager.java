@@ -53,6 +53,11 @@ public class CarManager implements CarService {
 			carDao.deleteById(deleteCarRequest.getCarId());
 		}
 	}
+	
+	@Override
+	public void delete(int carId) {
+		delete(DeleteCarRequest.builder().carId(carId).build());
+	}
 
 	@Override
 	public void update(UpdateCarRequest updateCarRequest) {
