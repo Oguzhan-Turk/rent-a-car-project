@@ -7,18 +7,23 @@ import com.oguzhanturk.rentacar.business.dtos.ListCarDto;
 import com.oguzhanturk.rentacar.business.request.CreateCarRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteCarRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateCarRequest;
+import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
 public interface CarService {
 
-	List<ListCarDto> getAll();
+	DataResult<List<ListCarDto>> getAll();
 
-	CarDto getById(int id);
+	DataResult<CarDto> getById(int id);
 
-	void add(CreateCarRequest createCarRequest);
+	Result add(CreateCarRequest createCarRequest);
 
-	void delete(DeleteCarRequest deleteCarRequest);
+	Result delete(DeleteCarRequest deleteCarRequest);
 
-	void update(UpdateCarRequest updateCarRequest);
+//	Result delete(int carId);
 
-	void delete(int carId);
+	Result update(UpdateCarRequest updateCarRequest);
+
+	DataResult<List<ListCarDto>> getByDailyPriceGreaterThan(double max);
+
 }

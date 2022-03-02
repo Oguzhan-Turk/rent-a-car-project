@@ -12,6 +12,11 @@ import com.oguzhanturk.rentacar.business.request.CreateCarRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteCarRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateCarRequest;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
+import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.ErrorResult;
+import com.oguzhanturk.rentacar.core.utilities.results.Result;
+import com.oguzhanturk.rentacar.core.utilities.results.SuccessDataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.SuccessResult;
 import com.oguzhanturk.rentacar.dataAccess.abstracts.CarDao;
 import com.oguzhanturk.rentacar.entities.concretes.Car;
 
@@ -27,44 +32,59 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public List<ListCarDto> getAll() {
+	public DataResult<List<ListCarDto>> getAll() {
 		List<Car> result = carDao.findAll();
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
 				.collect(Collectors.toList());
-		return response;
+		return new SuccessDataResult<List<ListCarDto>>(response);
 	}
 
 	@Override
-	public CarDto getById(int id) {
+	public DataResult<CarDto> getById(int id) {
 		Car car = carDao.getById(id);
 		CarDto response = modelMapperService.forDto().map(car, CarDto.class);
-		return response;
+		return new SuccessDataResult<CarDto>(response);
 	}
 
 	@Override
-	public void add(CreateCarRequest createCarRequest) {
+	public Result add(CreateCarRequest createCarRequest) {
 		Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
 		carDao.save(car);
+		return new SuccessResult();
 	}
 
 	@Override
-	public void delete(DeleteCarRequest deleteCarRequest) {
+	public Result delete(DeleteCarRequest deleteCarRequest) {
 		if (carDao.existsById(deleteCarRequest.getCarId())) {
 			carDao.deleteById(deleteCarRequest.getCarId());
+			return new SuccessResult();
 		}
-	}
-	
-	@Override
-	public void delete(int carId) {
-		delete(DeleteCarRequest.builder().carId(carId).build());
+		return new ErrorResult("The car was not found!");
 	}
 
+//	@Override
+//	public Result delete(int carId) {
+//		delete(DeleteCarRequest.builder().carId(carId).build());
+//	}
+
 	@Override
-	public void update(UpdateCarRequest updateCarRequest) {
+	public Result update(UpdateCarRequest updateCarRequest) {
 		if (carDao.existsById(updateCarRequest.getCarId())) {
 			Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
 			carDao.save(car);
+			return new SuccessResult();
 		}
+		return new ErrorResult("The car was not found!");
+	}
+
+	@Override
+	public DataResult<List<ListCarDto>> getByDailyPriceGreaterThan(double max) {
+		var result = this.carDao.getByDailyPriceLessThanEqual(max);
+
+		List<ListCarDto> response = result.stream()
+				.map(car -> this.modelMapperService.forDto().map(car, ListCarDto.class)).collect(Collectors.toList());
+
+		return new SuccessDataResult<List<ListCarDto>>(response);
 	}
 
 }

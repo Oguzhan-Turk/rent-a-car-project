@@ -19,6 +19,8 @@ import com.oguzhanturk.rentacar.business.dtos.ListCarDto;
 import com.oguzhanturk.rentacar.business.request.CreateCarRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteCarRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateCarRequest;
+import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
 @RestController
 @RequestMapping("/api/cars")
@@ -32,33 +34,38 @@ public class CarController {
 	}
 
 	@GetMapping("/getall")
-	public List<ListCarDto> getAll() {
+	public DataResult<List<ListCarDto>> getAll() {
 		return carService.getAll();
 	}
 
 	@GetMapping("/get")
-	public CarDto get(@RequestParam int id) {
+	public DataResult<CarDto> get(@RequestParam int id) {
 		return carService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public void add(@RequestBody CreateCarRequest createCarRequest) {
-		carService.add(createCarRequest);
+	public Result add(@RequestBody CreateCarRequest createCarRequest) {
+		return carService.add(createCarRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public void delete(@RequestBody DeleteCarRequest deleteCarRequest) {
-		carService.delete(deleteCarRequest);
-	}
-	
-	@DeleteMapping("/delete/{cardId}")
-	public void delete(@PathVariable int carId) {
-		carService.delete(carId);
+	public Result delete(@RequestBody DeleteCarRequest deleteCarRequest) {
+		return carService.delete(deleteCarRequest);
 	}
 
+//	@DeleteMapping("/delete/{cardId}")
+//	public Result delete(@PathVariable int carId) {
+//		return carService.delete(carId);
+//	}
+
 	@PutMapping("/update")
-	public void delete(@RequestBody UpdateCarRequest updateCarRequest) {
-		carService.update(updateCarRequest);
+	public Result delete(@RequestBody UpdateCarRequest updateCarRequest) {
+		return carService.update(updateCarRequest);
+	}
+
+	@GetMapping("/getByDailyPriceLessThanEqual")
+	public DataResult<List<ListCarDto>> getByDailyPriceLessThanEqual(double max) {
+		return carService.getByDailyPriceGreaterThan(max);
 	}
 
 }
