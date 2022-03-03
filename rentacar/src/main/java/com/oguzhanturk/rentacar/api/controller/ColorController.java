@@ -3,8 +3,6 @@ package com.oguzhanturk.rentacar.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oguzhanturk.rentacar.business.abstracts.ColorService;
 import com.oguzhanturk.rentacar.business.dtos.ColorDto;
 import com.oguzhanturk.rentacar.business.dtos.ListColorDto;
-import com.oguzhanturk.rentacar.business.request.CreateCarRequest;
 import com.oguzhanturk.rentacar.business.request.CreateColorRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteColorRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateColorRequest;
@@ -50,16 +47,18 @@ public class ColorController {
 		return colorService.add(createColorRequest);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/delete")
 	public Result delete(@RequestBody DeleteColorRequest deleteColorRequest) {
 		return colorService.delete(deleteColorRequest);
 	}
 
-	@PutMapping
+	@PutMapping("/update")
 	public Result update(@RequestBody UpdateColorRequest updateColorRequest) {
 		return colorService.update(updateColorRequest);
 	}
 
+
+//
 //	@PostMapping("/save")
 //	public ResponseEntity<ColorDto> add(@RequestBody CreateColorRequest createColorRequest) {
 //		ColorDto result = null;
