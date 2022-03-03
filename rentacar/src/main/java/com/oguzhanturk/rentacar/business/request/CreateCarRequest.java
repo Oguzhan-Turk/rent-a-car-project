@@ -1,5 +1,7 @@
 package com.oguzhanturk.rentacar.business.request;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateCarRequest {
 
-	private double dailyPrice;
+	private BigDecimal dailyPrice;
 	private int modelYear;
 	private String description;
 	private int brandId;

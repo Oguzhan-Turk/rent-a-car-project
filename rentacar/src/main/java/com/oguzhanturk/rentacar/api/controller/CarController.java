@@ -1,5 +1,6 @@
 package com.oguzhanturk.rentacar.api.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class CarController {
 	}
 
 	@GetMapping("/getByDailyPriceLessThanEqual")
-	public DataResult<List<ListCarDto>> getByDailyPriceLessThanEqual(double maxDailyPrice) {
+	public DataResult<List<ListCarDto>> getByDailyPriceLessThanEqual(BigDecimal maxDailyPrice) {
 		return carService.getByDailyPriceLessThan(maxDailyPrice);
 	}
 

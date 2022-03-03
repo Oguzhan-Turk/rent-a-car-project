@@ -1,5 +1,6 @@
 package com.oguzhanturk.rentacar.business.abstracts;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
@@ -26,7 +27,7 @@ public interface CarService {
 
 	Result update(UpdateCarRequest updateCarRequest);
 
-	DataResult<List<ListCarDto>> getByDailyPriceLessThan(double maxDailyPrice);
+	DataResult<List<ListCarDto>> getByDailyPriceLessThan(BigDecimal maxDailyPrice);
 
 	DataResult<List<ListCarDto>> getAllPaged(int pageNo, int pageSize);
 

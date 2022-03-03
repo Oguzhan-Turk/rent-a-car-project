@@ -1,5 +1,6 @@
 package com.oguzhanturk.rentacar.business.concretes;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,7 +83,7 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public DataResult<List<ListCarDto>> getByDailyPriceLessThan(double maxDailyPrice) {
+	public DataResult<List<ListCarDto>> getByDailyPriceLessThan(BigDecimal maxDailyPrice) {
 		var result = carDao.getByDailyPriceLessThanEqual(maxDailyPrice);
 
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))

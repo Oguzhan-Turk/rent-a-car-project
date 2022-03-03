@@ -1,5 +1,7 @@
 package com.oguzhanturk.rentacar.business.dtos;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CarDto {
 
 	private int carId;
-	private double dailyPrice;
+	private BigDecimal dailyPrice;
 	private int modelYear;
 	private String description;
 

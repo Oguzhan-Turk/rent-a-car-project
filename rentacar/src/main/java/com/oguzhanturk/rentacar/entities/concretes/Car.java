@@ -1,5 +1,7 @@
 package com.oguzhanturk.rentacar.entities.concretes;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +27,7 @@ public class Car {
 	@Column(name = "car_id")
 	private int carId;
 	@Column(name = "daily_price")
-	private double dailyPrice;
+	private BigDecimal dailyPrice;
 	@Column(name = "model_year")
 	private int modelYear;
 	@Column(name = "description")
