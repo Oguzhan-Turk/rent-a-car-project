@@ -3,6 +3,7 @@ package com.oguzhanturk.rentacar.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,8 +65,18 @@ public class CarController {
 	}
 
 	@GetMapping("/getByDailyPriceLessThanEqual")
-	public DataResult<List<ListCarDto>> getByDailyPriceLessThanEqual(double max) {
-		return carService.getByDailyPriceGreaterThan(max);
+	public DataResult<List<ListCarDto>> getByDailyPriceLessThanEqual(double maxDailyPrice) {
+		return carService.getByDailyPriceLessThan(maxDailyPrice);
+	}
+
+	@GetMapping("/getAllSorted")
+	public DataResult<List<ListCarDto>> getAllSorted(Sort.Direction direction) {
+		return carService.getAllSorted(direction);
+	}
+
+	@GetMapping("/getAllPaged")
+	public DataResult<List<ListCarDto>> getAllPaged(int pageNo, int pageSize) {
+		return carService.getAllPaged(pageNo, pageSize);
 	}
 
 }

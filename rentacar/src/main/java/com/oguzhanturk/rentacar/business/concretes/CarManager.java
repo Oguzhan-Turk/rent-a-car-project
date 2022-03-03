@@ -3,6 +3,10 @@ package com.oguzhanturk.rentacar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.CarService;
@@ -78,11 +82,35 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public DataResult<List<ListCarDto>> getByDailyPriceGreaterThan(double max) {
-		var result = this.carDao.getByDailyPriceLessThanEqual(max);
+	public DataResult<List<ListCarDto>> getByDailyPriceLessThan(double maxDailyPrice) {
+		var result = carDao.getByDailyPriceLessThanEqual(maxDailyPrice);
 
-		List<ListCarDto> response = result.stream()
-				.map(car -> this.modelMapperService.forDto().map(car, ListCarDto.class)).collect(Collectors.toList());
+		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
+				.collect(Collectors.toList());
+
+		return new SuccessDataResult<List<ListCarDto>>(response);
+	}
+
+	@Override
+	public DataResult<List<ListCarDto>> getAllPaged(int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+
+		List<Car> result = carDao.findAll(pageable).getContent();
+
+		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
+				.collect(Collectors.toList());
+
+		return new SuccessDataResult<List<ListCarDto>>(response);
+	}
+
+	@Override
+	public DataResult<List<ListCarDto>> getAllSorted(Direction direction) {
+
+		Sort sort = Sort.by(direction, "dailyPrice");
+
+		List<Car> result = carDao.findAll(sort);
+		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
+				.collect(Collectors.toList());
 
 		return new SuccessDataResult<List<ListCarDto>>(response);
 	}

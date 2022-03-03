@@ -2,6 +2,8 @@ package com.oguzhanturk.rentacar.business.abstracts;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
+
 import com.oguzhanturk.rentacar.business.dtos.CarDto;
 import com.oguzhanturk.rentacar.business.dtos.ListCarDto;
 import com.oguzhanturk.rentacar.business.request.CreateCarRequest;
@@ -24,6 +26,10 @@ public interface CarService {
 
 	Result update(UpdateCarRequest updateCarRequest);
 
-	DataResult<List<ListCarDto>> getByDailyPriceGreaterThan(double max);
+	DataResult<List<ListCarDto>> getByDailyPriceLessThan(double maxDailyPrice);
+
+	DataResult<List<ListCarDto>> getAllPaged(int pageNo, int pageSize);
+
+	DataResult<List<ListCarDto>> getAllSorted(Sort.Direction direction);
 
 }
