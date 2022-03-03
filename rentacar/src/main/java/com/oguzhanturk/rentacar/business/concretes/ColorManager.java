@@ -1,7 +1,6 @@
 package com.oguzhanturk.rentacar.business.concretes;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,11 @@ import com.oguzhanturk.rentacar.business.request.CreateColorRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteColorRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateColorRequest;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
+import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.ErrorResult;
+import com.oguzhanturk.rentacar.core.utilities.results.Result;
+import com.oguzhanturk.rentacar.core.utilities.results.SuccessDataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.SuccessResult;
 import com.oguzhanturk.rentacar.dataAccess.abstracts.ColorDao;
 import com.oguzhanturk.rentacar.entities.concretes.Color;
 
@@ -30,45 +34,48 @@ public class ColorManager implements ColorService {
 	}
 
 	@Override
-	public List<ListColorDto> getAll() {
+	public DataResult<List<ListColorDto>> getAll() {
 		List<Color> result = colorDao.findAll();
 		List<ListColorDto> response = result.stream()
 				.map(color -> modelMapperService.forDto().map(color, ListColorDto.class)).collect(Collectors.toList());
-		return response;
+		return new SuccessDataResult<List<ListColorDto>>(response);
 	}
 
 	@Override
-	public ColorDto add(CreateColorRequest createColorRequest) {
-		Color found = null;
+	public Result add(CreateColorRequest createColorRequest) {
 		if (!colorDao.existsByColorName(createColorRequest.getColorName())) {
 			Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
-			found = colorDao.save(color);
+			colorDao.save(color);
+			return new SuccessResult();
 		}
-		return modelMapperService.forDto().map(found, ColorDto.class);
-
+		return new ErrorResult("The color already exist!");
 	}
 
 	@Override
-	public ColorDto getById(int id) {
+	public DataResult<ColorDto> getById(int id) {
 		Color color = colorDao.getById(id);
 		ColorDto response = modelMapperService.forDto().map(color, ColorDto.class);
-		return response;
+		return new SuccessDataResult<ColorDto>(response);
 	}
 
 	@Override
-	public void delete(DeleteColorRequest deleteColorRequest) {
+	public Result delete(DeleteColorRequest deleteColorRequest) {
 		if (colorDao.existsById(deleteColorRequest.getColorId())) {
 			colorDao.deleteById(deleteColorRequest.getColorId());
+			return new SuccessResult();
 		}
+		return new ErrorResult("The brand was not found!");
 
 	}
 
 	@Override
-	public void update(UpdateColorRequest updateColorRequest) {
+	public Result update(UpdateColorRequest updateColorRequest) {
 		if (colorDao.existsById(updateColorRequest.getColorId())) {
 			Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
 			colorDao.save(color);
+			return new SuccessResult();
 		}
+		return new ErrorResult("The brand was not found!");
 
 	}
 

@@ -7,17 +7,19 @@ import com.oguzhanturk.rentacar.business.dtos.ListBrandDto;
 import com.oguzhanturk.rentacar.business.request.CreateBrandRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteBrandRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateBrandRequest;
+import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
 public interface BrandService {
-	
-	List<ListBrandDto> getAll();
 
-	BrandDto getById(int id);
+	DataResult<List<ListBrandDto>> getAll();
 
-	void add(CreateBrandRequest createBrandRequest);
+	DataResult<BrandDto> getById(int id);
 
-	void update(UpdateBrandRequest updateBrandRequest);
+	Result add(CreateBrandRequest createBrandRequest);
 
-	void delete(DeleteBrandRequest deleteBrandRequest);
+	Result update(UpdateBrandRequest updateBrandRequest);
+
+	Result delete(DeleteBrandRequest deleteBrandRequest);
 
 }
