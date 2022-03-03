@@ -29,7 +29,6 @@ public class Brand {
 	@Column(name = "brand_name", unique = true)
 	private String brandName;
 
-	@OneToMany
-	@JoinColumn(name = "car_id")
+	@OneToMany(mappedBy = "brand")
 	private List<Car> cars;
 }

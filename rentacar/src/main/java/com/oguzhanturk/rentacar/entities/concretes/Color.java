@@ -29,7 +29,6 @@ public class Color {
 	@Column(name = "color_name")
 	private String colorName;
 
-	@OneToMany
-	@JoinColumn(name = "car_id")
-	private List<Car> cars;
+	@OneToMany(mappedBy = "color")
+	private List<Car> cars; 
 }
