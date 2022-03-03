@@ -14,6 +14,11 @@ import com.oguzhanturk.rentacar.business.request.CreateBrandRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteBrandRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateBrandRequest;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
+import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.ErrorResult;
+import com.oguzhanturk.rentacar.core.utilities.results.Result;
+import com.oguzhanturk.rentacar.core.utilities.results.SuccessDataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.SuccessResult;
 import com.oguzhanturk.rentacar.dataAccess.abstracts.BrandDao;
 import com.oguzhanturk.rentacar.entities.concretes.Brand;
 
@@ -30,43 +35,47 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
-	public List<ListBrandDto> getAll() {
+	public DataResult<List<ListBrandDto>> getAll() {
 		List<Brand> result = brandDao.findAll();
 		List<ListBrandDto> response = result.stream()
 				.map(brand -> modelMapperService.forDto().map(brand, ListBrandDto.class)).collect(Collectors.toList());
-		return response;
+		return new SuccessDataResult<List<ListBrandDto>>(response);
 	}
 
 	@Override
-	public void add(CreateBrandRequest createBrandRequest) {
+	public Result add(CreateBrandRequest createBrandRequest) {
 		if (!brandDao.existsByBrandName(createBrandRequest.getBrandName())) {
 			Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 			brandDao.save(brand);
+			return new SuccessResult();
 		}
-
+		return new ErrorResult("The brand already exist!");
 	}
 
 	@Override
-	public BrandDto getById(int id) {
+	public DataResult<BrandDto> getById(int id) {
 		Brand brand = brandDao.getById(id);
 		BrandDto response = modelMapperService.forDto().map(brand, BrandDto.class);
-		return response;
+		return new SuccessDataResult<BrandDto>(response);
 	}
 
 	@Override
-	public void delete(DeleteBrandRequest deleteBrandRequest) {
+	public Result delete(DeleteBrandRequest deleteBrandRequest) {
 		if (brandDao.existsById(deleteBrandRequest.getBrandId())) {
 			brandDao.deleteById(deleteBrandRequest.getBrandId());
+			return new SuccessResult();
 		}
-
+		return new ErrorResult("The brand was not found!");
 	}
 
 	@Override
-	public void update(UpdateBrandRequest updateBrandRequest) {
+	public Result update(UpdateBrandRequest updateBrandRequest) {
 		if (brandDao.existsById(updateBrandRequest.getBrandId())) {
 			Brand brand = modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 			brandDao.save(brand);
+			return new SuccessResult();
 		}
+		return new ErrorResult("The brand was not found!");
 
 	}
 

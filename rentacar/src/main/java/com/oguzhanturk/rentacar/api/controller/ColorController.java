@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oguzhanturk.rentacar.business.abstracts.ColorService;
 import com.oguzhanturk.rentacar.business.dtos.ColorDto;
 import com.oguzhanturk.rentacar.business.dtos.ListColorDto;
+import com.oguzhanturk.rentacar.business.request.CreateCarRequest;
 import com.oguzhanturk.rentacar.business.request.CreateColorRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteColorRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateColorRequest;
+import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
 @RestController
 @RequestMapping("/api/colors")
@@ -33,34 +36,38 @@ public class ColorController {
 	}
 
 	@GetMapping("/getall")
-	public List<ListColorDto> getAll() {
+	public DataResult<List<ListColorDto>> getAll() {
 		return colorService.getAll();
 	}
 
 	@GetMapping("/get")
-	public ColorDto get(@RequestParam int id) {
+	public DataResult<ColorDto> get(@RequestParam int id) {
 		return colorService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public ResponseEntity<ColorDto> add(@RequestBody CreateColorRequest createColorRequest) {
-		ColorDto result = null;
-		try {
-			result = colorService.add(createColorRequest);
-		} catch (IllegalArgumentException e) {
-			return new ResponseEntity<ColorDto>(HttpStatus.CONFLICT);
-		}
-		return new ResponseEntity<ColorDto>(result, HttpStatus.OK);
+	public Result add(@RequestBody CreateColorRequest createColorRequest) {
+		return colorService.add(createColorRequest);
 	}
 
 	@DeleteMapping
-	public void delete(@RequestBody DeleteColorRequest deleteColorRequest) {
-		colorService.delete(deleteColorRequest);
+	public Result delete(@RequestBody DeleteColorRequest deleteColorRequest) {
+		return colorService.delete(deleteColorRequest);
 	}
 
 	@PutMapping
-	public void update(@RequestBody UpdateColorRequest updateColorRequest) {
-		colorService.update(updateColorRequest);
+	public Result update(@RequestBody UpdateColorRequest updateColorRequest) {
+		return colorService.update(updateColorRequest);
 	}
 
+//	@PostMapping("/save")
+//	public ResponseEntity<ColorDto> add(@RequestBody CreateColorRequest createColorRequest) {
+//		ColorDto result = null;
+//		try {
+//			result = colorService.add(createColorRequest);
+//		} catch (IllegalArgumentException e) {
+//			return new ResponseEntity<ColorDto>(HttpStatus.CONFLICT);
+//		}
+//		return new ResponseEntity<ColorDto>(result, HttpStatus.OK);
+//	}
 }

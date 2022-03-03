@@ -18,6 +18,8 @@ import com.oguzhanturk.rentacar.business.dtos.ListBrandDto;
 import com.oguzhanturk.rentacar.business.request.CreateBrandRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteBrandRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateBrandRequest;
+import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
+import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
 @RestController
 @RequestMapping("/api/brands")
@@ -31,27 +33,27 @@ public class BrandController {
 	}
 
 	@GetMapping("/getall")
-	public List<ListBrandDto> getAll() {
+	public DataResult<List<ListBrandDto>> getAll() {
 		return brandService.getAll();
 	}
 
 	@GetMapping("/get")
-	public BrandDto get(@RequestParam int id) {
+	public DataResult<BrandDto> get(@RequestParam int id) {
 		return brandService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public void add(@RequestBody CreateBrandRequest createBrandRequest) {
-		brandService.add(createBrandRequest);
+	public Result add(@RequestBody CreateBrandRequest createBrandRequest) {
+		return brandService.add(createBrandRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public void delete(@RequestBody DeleteBrandRequest deleteBrandRequest) {
-		brandService.delete(deleteBrandRequest);
+	public Result delete(@RequestBody DeleteBrandRequest deleteBrandRequest) {
+		return brandService.delete(deleteBrandRequest);
 	}
 
 	@PutMapping("/update")
-	public void update(@RequestBody UpdateBrandRequest updateBrandRequest) {
-		brandService.update(updateBrandRequest);
+	public Result update(@RequestBody UpdateBrandRequest updateBrandRequest) {
+		return brandService.update(updateBrandRequest);
 	}
 }
