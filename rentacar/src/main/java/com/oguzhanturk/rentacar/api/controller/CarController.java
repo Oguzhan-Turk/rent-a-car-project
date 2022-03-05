@@ -34,7 +34,7 @@ public class CarController {
 		this.carService = carService;
 	}
 
-	@GetMapping("/getall")
+	@GetMapping("/getAll")
 	public DataResult<List<ListCarDto>> getAll() {
 		return carService.getAll();
 	}
