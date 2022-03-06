@@ -31,7 +31,7 @@ public class CarMaintenance {
 	@Column(name = "return_date")
 	private LocalDateTime returnDate;
 	@ManyToOne
-	@JoinColumn(name = "maintenance_car_id")
+	@JoinColumn(name = "car_id")
 	private Car car;
 
 }
