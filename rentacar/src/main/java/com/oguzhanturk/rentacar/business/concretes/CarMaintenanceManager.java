@@ -58,17 +58,17 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 	@Override
 	public Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest) {
+
 		CarMaintenance maintenance = new CarMaintenance();
-
-//		maintenance.setCar(carDao.getById(createCarMaintenanceRequest.getCarId()));
-//		maintenance.setMaintenanceDescription(createCarMaintenanceRequest.getMaintenanceDescription());
-//		maintenance.setReturnDate(createCarMaintenanceRequest.getReturnDate());
-//		carMaintenanceDao.save(maintenance);
-
-		CarMaintenance carMaintenance = modelMapperService.forRequest().map(createCarMaintenanceRequest,
-				CarMaintenance.class);
-		System.err.println(carMaintenance.toString());
-		carMaintenanceDao.save(carMaintenance);
+		maintenance.setCar(carDao.getById(createCarMaintenanceRequest.getCarId()));
+		maintenance.setMaintenanceDescription(createCarMaintenanceRequest.getMaintenanceDescription());
+		maintenance.setReturnDate(createCarMaintenanceRequest.getReturnDate());
+		carMaintenanceDao.save(maintenance);
+		
+//		CarMaintenance carMaintenance = modelMapperService.forRequest().map(createCarMaintenanceRequest,
+//				CarMaintenance.class);
+//		System.err.println(carMaintenance.toString());
+//		carMaintenanceDao.save(carMaintenance);
 		return new SuccessResult();
 	}
 
