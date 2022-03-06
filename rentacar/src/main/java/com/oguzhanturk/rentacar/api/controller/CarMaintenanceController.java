@@ -2,10 +2,13 @@ package com.oguzhanturk.rentacar.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +19,7 @@ import com.oguzhanturk.rentacar.business.dtos.CarMaintenanceDto;
 import com.oguzhanturk.rentacar.business.dtos.ListCarMaintenanceDto;
 import com.oguzhanturk.rentacar.business.request.CreateCarMaintenanceRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteCarMaintenanceRequest;
+import com.oguzhanturk.rentacar.business.request.UpdateCarMaintenanceRequest;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
@@ -35,22 +39,27 @@ public class CarMaintenanceController {
 		return carMaintenanceService.getAll();
 	}
 
-	@GetMapping("/get")
+	@GetMapping("/get/{id}")
 	public DataResult<CarMaintenanceDto> get(@RequestParam int id) {
 		return carMaintenanceService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public Result add(@RequestBody CreateCarMaintenanceRequest createCarMaintenanceRequest) {
+	public Result add(@RequestBody @Valid CreateCarMaintenanceRequest createCarMaintenanceRequest) {
 		return carMaintenanceService.add(createCarMaintenanceRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) {
+	public Result delete(@RequestBody @Valid DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) {
 		return carMaintenanceService.delete(deleteCarMaintenanceRequest);
 	}
 
-	@GetMapping("/getAllByCar")
+	@PutMapping("/update")
+	public Result delete(@RequestBody @Valid UpdateCarMaintenanceRequest updateCarMaintenanceRequest) {
+		return carMaintenanceService.update(updateCarMaintenanceRequest);
+	}
+
+	@GetMapping("/getAllByCar/{id}")
 	public DataResult<List<ListCarMaintenanceDto>> getAllByCar(@RequestParam int id) {
 		return carMaintenanceService.getAllByCar(id);
 	}

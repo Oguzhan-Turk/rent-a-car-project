@@ -3,6 +3,8 @@ package com.oguzhanturk.rentacar.api.controller;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,18 +41,18 @@ public class CarController {
 		return carService.getAll();
 	}
 
-	@GetMapping("/get")
+	@GetMapping("/get/{id}")
 	public DataResult<CarDto> get(@RequestParam int id) {
 		return carService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public Result add(@RequestBody CreateCarRequest createCarRequest) {
+	public Result add(@RequestBody @Valid CreateCarRequest createCarRequest) {
 		return carService.add(createCarRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody DeleteCarRequest deleteCarRequest) {
+	public Result delete(@RequestBody @Valid DeleteCarRequest deleteCarRequest) {
 		return carService.delete(deleteCarRequest);
 	}
 
@@ -60,7 +62,7 @@ public class CarController {
 //	}
 
 	@PutMapping("/update")
-	public Result delete(@RequestBody UpdateCarRequest updateCarRequest) {
+	public Result delete(@RequestBody @Valid UpdateCarRequest updateCarRequest) {
 		return carService.update(updateCarRequest);
 	}
 

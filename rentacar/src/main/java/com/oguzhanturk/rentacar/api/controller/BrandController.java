@@ -2,6 +2,8 @@ package com.oguzhanturk.rentacar.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,23 +39,23 @@ public class BrandController {
 		return brandService.getAll();
 	}
 
-	@GetMapping("/get")
+	@GetMapping("/get/{id}")
 	public DataResult<BrandDto> get(@RequestParam int id) {
 		return brandService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public Result add(@RequestBody CreateBrandRequest createBrandRequest) {
+	public Result add(@RequestBody @Valid CreateBrandRequest createBrandRequest) {
 		return brandService.add(createBrandRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody DeleteBrandRequest deleteBrandRequest) {
+	public Result delete(@RequestBody @Valid DeleteBrandRequest deleteBrandRequest) {
 		return brandService.delete(deleteBrandRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody UpdateBrandRequest updateBrandRequest) {
+	public Result update(@RequestBody @Valid UpdateBrandRequest updateBrandRequest) {
 		return brandService.update(updateBrandRequest);
 	}
 }

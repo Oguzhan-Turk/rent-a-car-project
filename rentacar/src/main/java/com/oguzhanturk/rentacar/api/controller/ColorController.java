@@ -2,6 +2,8 @@ package com.oguzhanturk.rentacar.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,23 +39,23 @@ public class ColorController {
 		return colorService.getAll();
 	}
 
-	@GetMapping("/get")
+	@GetMapping("/get/{id}")
 	public DataResult<ColorDto> get(@RequestParam int id) {
 		return colorService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public Result add(@RequestBody CreateColorRequest createColorRequest) {
+	public Result add(@RequestBody @Valid CreateColorRequest createColorRequest) {
 		return colorService.add(createColorRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody DeleteColorRequest deleteColorRequest) {
+	public Result delete(@RequestBody @Valid DeleteColorRequest deleteColorRequest) {
 		return colorService.delete(deleteColorRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody UpdateColorRequest updateColorRequest) {
+	public Result update(@RequestBody @Valid UpdateColorRequest updateColorRequest) {
 		return colorService.update(updateColorRequest);
 	}
 
