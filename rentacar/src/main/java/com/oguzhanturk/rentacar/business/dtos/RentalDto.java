@@ -1,6 +1,5 @@
 package com.oguzhanturk.rentacar.business.dtos;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -17,9 +16,9 @@ public class RentalDto {
 	private LocalDateTime returnDate;
 
 	private int carId;
-	private String brandName;
-	private int modelYear;
-	private String description;
-	private BigDecimal dailyPrice;
+//	private String brandName;
+//	private int modelYear;
+//	private String description;
+//	private BigDecimal dailyPrice;
 
 }
