@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -39,6 +38,7 @@ public class Car {
 	@ManyToOne
 	@JoinColumn(name = "brand_id")
 	private Brand brand;
+
 	@ManyToOne
 	@JoinColumn(name = "color_id")
 	private Color color;
@@ -46,7 +46,7 @@ public class Car {
 	@OneToMany(mappedBy = "car")
 	private List<CarMaintenance> carMaintenances;
 
-	@OneToOne(mappedBy = "car")
-	private Rental rental;
+	@OneToMany(mappedBy = "car")
+	private List<Rental> rentals;
 
 }
