@@ -43,6 +43,13 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
+	public DataResult<BrandDto> getById(int id) {
+		Brand brand = brandDao.getById(id);
+		BrandDto response = modelMapperService.forDto().map(brand, BrandDto.class);
+		return new SuccessDataResult<BrandDto>(response);
+	}
+
+	@Override
 	public Result add(CreateBrandRequest createBrandRequest) {
 		if (!brandDao.existsByBrandName(createBrandRequest.getBrandName())) {
 			Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
@@ -50,13 +57,6 @@ public class BrandManager implements BrandService {
 			return new SuccessResult();
 		}
 		return new ErrorResult("The brand already exist!");
-	}
-
-	@Override
-	public DataResult<BrandDto> getById(int id) {
-		Brand brand = brandDao.getById(id);
-		BrandDto response = modelMapperService.forDto().map(brand, BrandDto.class);
-		return new SuccessDataResult<BrandDto>(response);
 	}
 
 	@Override

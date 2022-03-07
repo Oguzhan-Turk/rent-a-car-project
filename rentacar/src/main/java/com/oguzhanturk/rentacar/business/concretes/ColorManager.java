@@ -42,6 +42,13 @@ public class ColorManager implements ColorService {
 	}
 
 	@Override
+	public DataResult<ColorDto> getById(int id) {
+		Color color = colorDao.getById(id);
+		ColorDto response = modelMapperService.forDto().map(color, ColorDto.class);
+		return new SuccessDataResult<ColorDto>(response);
+	}
+
+	@Override
 	public Result add(CreateColorRequest createColorRequest) {
 		if (!colorDao.existsByColorName(createColorRequest.getColorName())) {
 			Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
@@ -49,13 +56,6 @@ public class ColorManager implements ColorService {
 			return new SuccessResult();
 		}
 		return new ErrorResult("The color already exist!");
-	}
-
-	@Override
-	public DataResult<ColorDto> getById(int id) {
-		Color color = colorDao.getById(id);
-		ColorDto response = modelMapperService.forDto().map(color, ColorDto.class);
-		return new SuccessDataResult<ColorDto>(response);
 	}
 
 	@Override
