@@ -16,9 +16,5 @@ public class RentalDto {
 	private LocalDateTime returnDate;
 
 	private int carId;
-//	private String brandName;
-//	private int modelYear;
-//	private String description;
-//	private BigDecimal dailyPrice;
 
 }
