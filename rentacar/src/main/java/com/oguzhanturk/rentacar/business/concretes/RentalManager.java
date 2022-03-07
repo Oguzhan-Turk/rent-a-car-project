@@ -7,7 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oguzhanturk.rentacar.business.abstracts.CarMaintenanceService;
+import com.oguzhanturk.rentacar.business.abstracts.CarService;
 import com.oguzhanturk.rentacar.business.abstracts.RentalService;
+import com.oguzhanturk.rentacar.business.dtos.ListCarMaintenanceDto;
 import com.oguzhanturk.rentacar.business.dtos.ListRentalDto;
 import com.oguzhanturk.rentacar.business.dtos.RentalDto;
 import com.oguzhanturk.rentacar.business.request.CreateRentalRequest;
@@ -19,9 +22,7 @@ import com.oguzhanturk.rentacar.core.utilities.results.ErrorResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 import com.oguzhanturk.rentacar.core.utilities.results.SuccessDataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.SuccessResult;
-import com.oguzhanturk.rentacar.dataAccess.abstracts.CarMaintenanceDao;
 import com.oguzhanturk.rentacar.dataAccess.abstracts.RentalDao;
-import com.oguzhanturk.rentacar.entities.concretes.CarMaintenance;
 import com.oguzhanturk.rentacar.entities.concretes.Rental;
 
 @Service
@@ -29,14 +30,16 @@ public class RentalManager implements RentalService {
 
 	private final RentalDao rentalDao;
 	private final ModelMapperService modelMapperService;
-	private final CarMaintenanceDao carMaintenanceDao;
+	private final CarMaintenanceService carMaintenanceService;
+	private final CarService carService;
 
 	@Autowired
-	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService,
-			CarMaintenanceDao carMaintenanceDao) {
+	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService, CarService carService,
+			CarMaintenanceService carMaintenanceService) {
 		this.rentalDao = rentalDao;
 		this.modelMapperService = modelMapperService;
-		this.carMaintenanceDao = carMaintenanceDao;
+		this.carMaintenanceService = carMaintenanceService;
+		this.carService = carService;
 	}
 
 	@Override
@@ -57,10 +60,13 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
-		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-		if (isCarInMaintenance(rental)) {
+		if (isCarInMaintenance(createRentalRequest.getCarId())) {
 			return new ErrorResult("The car is under maintenance");
+		} else if (isCarAlreadyRented(createRentalRequest.getCarId())) {
+			return new ErrorResult("The car is already rented");
 		}
+
+		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
 		rentalDao.save(rental);
 		return new SuccessResult();
 	}
@@ -84,17 +90,45 @@ public class RentalManager implements RentalService {
 		return new ErrorResult("The rental was not found!");
 	}
 
-	private boolean isCarInMaintenance(Rental rental) {
-		List<CarMaintenance> result = carMaintenanceDao.getAllByCarCarId(rental.getCar().getCarId());
-		if (Objects.nonNull(result)) {
-			for (CarMaintenance carMaintenance : result) {
-				if (Objects.isNull(carMaintenance.getReturnDate())
-						|| carMaintenance.getReturnDate().isAfter(rental.getRentDate())) {
-					return false;
+	private boolean isCarInMaintenance(int carId) {
+
+		DataResult<List<ListCarMaintenanceDto>> maintenanceDtoResults = carMaintenanceService.getAllByCar(carId);
+		List<ListCarMaintenanceDto> maintenanceDtos = maintenanceDtoResults.getData();
+
+		if (Objects.nonNull(maintenanceDtos)) {
+			for (ListCarMaintenanceDto carMaintenanceDto : maintenanceDtos) {
+				if (Objects.isNull(carMaintenanceDto.getReturnDate()) || carMaintenanceDto.getReturnDate()
+						.isAfter(rentalDao.getByCarCarId(carId).get(0).getRentDate())) {
+					return true;
 				}
 			}
 		}
-		return true;
+		return false;
+
+//		List<CarMaintenance> result = carMaintenanceDao.getAllByCarCarId(rental.getCar().getCarId());
+//		if (Objects.nonNull(result)) {
+//			for (CarMaintenance carMaintenance : result) {
+//				if (Objects.isNull(carMaintenance.getReturnDate())
+//						|| carMaintenance.getReturnDate().isAfter(rental.getRentDate())) {
+//			return true;
+//				}
+//			}
+//		}
+//
+//		return false;
+	}
+
+	private boolean isCarAlreadyRented(int carId) {
+
+		List<Rental> rentals = rentalDao.getByCarCarId(carId);
+		if (!rentals.isEmpty()) {
+			for (Rental rental : rentals) {
+				if (Objects.isNull(rental.getReturnDate())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
