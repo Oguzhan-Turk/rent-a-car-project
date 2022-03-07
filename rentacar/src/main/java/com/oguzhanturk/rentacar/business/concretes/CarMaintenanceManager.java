@@ -62,7 +62,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		CarMaintenance maintenance = new CarMaintenance();
 		maintenance.setCar(carDao.getById(createCarMaintenanceRequest.getCarId()));
 		maintenance.setMaintenanceDescription(createCarMaintenanceRequest.getMaintenanceDescription());
-		maintenance.setReturnDate(createCarMaintenanceRequest.getReturnDate());
+//		maintenance.setReturnDate(createCarMaintenanceRequest.getReturnDate());
 		carMaintenanceDao.save(maintenance);
 		//TODO **
 //		CarMaintenance carMaintenance = modelMapperService.forRequest().map(createCarMaintenanceRequest,
