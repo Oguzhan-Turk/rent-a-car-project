@@ -8,4 +8,5 @@ import com.oguzhanturk.rentacar.entities.concretes.Rental;
 @Repository
 public interface RentalDao extends JpaRepository<Rental, Integer> {
 
+	Rental getByCarCarId(int id);
 }
