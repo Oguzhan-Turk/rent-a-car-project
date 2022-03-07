@@ -61,7 +61,7 @@ public class RentalManager implements RentalService {
 		if (isCarInMaintenance(rental)) {
 			return new ErrorResult("The car is under maintenance");
 		}
-
+		rentalDao.save(rental);
 		return new SuccessResult();
 	}
 
