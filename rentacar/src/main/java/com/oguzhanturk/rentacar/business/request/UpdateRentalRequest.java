@@ -25,7 +25,7 @@ public class UpdateRentalRequest {
 	@Min(value = 1, message = "Car id should be positive integer")
 	private int carId;
 
-	@Min(value = 1, message = "Customer id should be positive integer")
-	private int customerId;
+//	@Min(value = 1, message = "Customer id should be positive integer")
+//	private int customerId;
 
 }
