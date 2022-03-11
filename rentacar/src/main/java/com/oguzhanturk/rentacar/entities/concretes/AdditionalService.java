@@ -1,6 +1,6 @@
 package com.oguzhanturk.rentacar.entities.concretes;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,23 +15,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "car_maintenances")
-@Entity
-public class CarMaintenance {
+@Table(name = "additional_service")
+public class AdditionalService {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "maintenance_id")
-	private int maintenanceId;
-	@Column(name = "maintenance_description")
-	private String maintenanceDescription;
-	@Column(name = "return_date")
-	private LocalDate returnDate;
-	@ManyToOne
-	@JoinColumn(name = "car_id")
-	private Car car;
+	@Column(name = "additional_service_id")
+	private int additionalId;
 
+	@Column(name = "additional_service_name")
+	private String name;
+
+	@Column(name = "additional_service_description")
+	private String additionalServiceDescription;
+
+	@Column(name = "daily_price")
+	private BigDecimal dailyPrice;
+
+	@ManyToOne
+	@JoinColumn(name = "rental_id")
+	private Rental rental;
 }

@@ -1,6 +1,6 @@
 package com.oguzhanturk.rentacar.business.request;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -16,14 +16,13 @@ public class UpdateRentalRequest {
 
 	@Min(value = 1, message = "Rent id should be positive integer")
 	private int rentId;
-	
-	@NotNull
-	private LocalDateTime rentDate;
-	
-	private LocalDateTime returnDate;
 
-	@Min(value = 1, message = "Car id should be positive integer")
-	private int carId;
+
+	@NotNull
+	private LocalDate returnDate;
+
+//	@Min(value = 1, message = "Car id should be positive integer")
+//	private int carId;
 
 //	@Min(value = 1, message = "Customer id should be positive integer")
 //	private int customerId;

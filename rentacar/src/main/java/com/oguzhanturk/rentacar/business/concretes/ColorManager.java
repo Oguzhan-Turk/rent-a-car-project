@@ -12,6 +12,7 @@ import com.oguzhanturk.rentacar.business.dtos.ListColorDto;
 import com.oguzhanturk.rentacar.business.request.CreateColorRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteColorRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateColorRequest;
+import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.ErrorResult;
@@ -42,41 +43,48 @@ public class ColorManager implements ColorService {
 	}
 
 	@Override
-	public DataResult<ColorDto> getById(int id) {
+	public DataResult<ColorDto> getById(int id) throws BusinessException {
+		isExistById(id);
 		Color color = colorDao.getById(id);
 		ColorDto response = modelMapperService.forDto().map(color, ColorDto.class);
 		return new SuccessDataResult<ColorDto>(response);
 	}
 
 	@Override
-	public Result add(CreateColorRequest createColorRequest) {
-		if (!colorDao.existsByColorName(createColorRequest.getColorName())) {
-			Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
-			colorDao.save(color);
-			return new SuccessResult();
-		}
-		return new ErrorResult("The color already exist!");
+	public Result add(CreateColorRequest createColorRequest) throws BusinessException {
+		checkIfNameIsExist(createColorRequest.getColorName());
+		Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
+		colorDao.save(color);
+		return new SuccessResult();
 	}
 
 	@Override
-	public Result delete(DeleteColorRequest deleteColorRequest) {
-		if (colorDao.existsById(deleteColorRequest.getColorId())) {
-			colorDao.deleteById(deleteColorRequest.getColorId());
-			return new SuccessResult();
-		}
-		return new ErrorResult("The brand was not found!");
-
+	public Result delete(DeleteColorRequest deleteColorRequest) throws BusinessException {
+		isExistById(deleteColorRequest.getColorId());
+		colorDao.deleteById(deleteColorRequest.getColorId());
+		return new SuccessResult();
 	}
 
 	@Override
-	public Result update(UpdateColorRequest updateColorRequest) {
-		if (colorDao.existsById(updateColorRequest.getColorId())) {
-			Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
-			colorDao.save(color);
-			return new SuccessResult();
-		}
-		return new ErrorResult("The brand was not found!");
+	public Result update(UpdateColorRequest updateColorRequest) throws BusinessException {
+		isExistById(updateColorRequest.getColorId());
+		checkIfNameIsExist(updateColorRequest.getColorName());
+		Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
+		colorDao.save(color);
+		return new SuccessResult();
+	}
 
+	private void checkIfNameIsExist(String colorName) throws BusinessException {
+		if (colorDao.existsByColorName(colorName)) {
+			throw new BusinessException(colorName + " already exist!");
+		}
+	}
+
+	private boolean isExistById(int colorId) throws BusinessException {
+		if (colorDao.existsById(colorId)) {
+			return true;
+		}
+		throw new BusinessException("The color with id : " + colorId + " was not found!");
 	}
 
 }

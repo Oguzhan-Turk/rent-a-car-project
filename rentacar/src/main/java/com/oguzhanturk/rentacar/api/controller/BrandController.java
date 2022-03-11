@@ -20,6 +20,7 @@ import com.oguzhanturk.rentacar.business.dtos.ListBrandDto;
 import com.oguzhanturk.rentacar.business.request.CreateBrandRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteBrandRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateBrandRequest;
+import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
@@ -40,22 +41,22 @@ public class BrandController {
 	}
 
 	@GetMapping("/get/{id}")
-	public DataResult<BrandDto> get(@RequestParam int id) {
+	public DataResult<BrandDto> get(@RequestParam int id) throws BusinessException {
 		return brandService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public Result add(@RequestBody @Valid CreateBrandRequest createBrandRequest) {
+	public Result add(@RequestBody @Valid CreateBrandRequest createBrandRequest) throws BusinessException {
 		return brandService.add(createBrandRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteBrandRequest deleteBrandRequest) {
+	public Result delete(@RequestBody @Valid DeleteBrandRequest deleteBrandRequest) throws BusinessException {
 		return brandService.delete(deleteBrandRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateBrandRequest updateBrandRequest) {
+	public Result update(@RequestBody @Valid UpdateBrandRequest updateBrandRequest) throws BusinessException {
 		return brandService.update(updateBrandRequest);
 	}
 }

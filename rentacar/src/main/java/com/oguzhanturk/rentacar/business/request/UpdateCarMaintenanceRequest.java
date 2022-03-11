@@ -1,6 +1,6 @@
 package com.oguzhanturk.rentacar.business.request;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -24,5 +24,5 @@ public class UpdateCarMaintenanceRequest {
 	private String maintenanceDescription;
 	
 	@NotNull
-	private LocalDateTime returnDate;
+	private LocalDate returnDate;
 }

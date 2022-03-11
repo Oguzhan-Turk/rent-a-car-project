@@ -22,6 +22,7 @@ import com.oguzhanturk.rentacar.business.dtos.ListCarDto;
 import com.oguzhanturk.rentacar.business.request.CreateCarRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteCarRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateCarRequest;
+import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
@@ -42,7 +43,7 @@ public class CarController {
 	}
 
 	@GetMapping("/get/{id}")
-	public DataResult<CarDto> get(@RequestParam int id) {
+	public DataResult<CarDto> get(@RequestParam int id) throws BusinessException {
 		return carService.getById(id);
 	}
 
@@ -52,7 +53,7 @@ public class CarController {
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteCarRequest deleteCarRequest) {
+	public Result delete(@RequestBody @Valid DeleteCarRequest deleteCarRequest) throws BusinessException {
 		return carService.delete(deleteCarRequest);
 	}
 
@@ -62,7 +63,7 @@ public class CarController {
 //	}
 
 	@PutMapping("/update")
-	public Result delete(@RequestBody @Valid UpdateCarRequest updateCarRequest) {
+	public Result delete(@RequestBody @Valid UpdateCarRequest updateCarRequest) throws BusinessException {
 		return carService.update(updateCarRequest);
 	}
 

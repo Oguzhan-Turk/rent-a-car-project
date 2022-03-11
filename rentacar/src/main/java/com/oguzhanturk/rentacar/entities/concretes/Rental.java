@@ -1,6 +1,7 @@
 package com.oguzhanturk.rentacar.entities.concretes;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -28,10 +30,10 @@ public class Rental {
 	private int rentId;
 
 	@Column(name = "rent_date")
-	private LocalDateTime rentDate;
+	private LocalDate rentDate;
 
 	@Column(name = "return_date")
-	private LocalDateTime returnDate;
+	private LocalDate returnDate;
 
 	@ManyToOne
 	@JoinColumn(name = "car_id")
@@ -40,5 +42,8 @@ public class Rental {
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
+	
+	@OneToMany(mappedBy = "rental")
+	private List<AdditionalService> orderedAdditionalServices;
 
 }

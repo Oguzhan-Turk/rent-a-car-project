@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oguzhanturk.rentacar.business.abstracts.RentalService;
+import com.oguzhanturk.rentacar.business.dtos.ListCarMaintenanceDto;
 import com.oguzhanturk.rentacar.business.dtos.ListRentalDto;
 import com.oguzhanturk.rentacar.business.dtos.RentalDto;
 import com.oguzhanturk.rentacar.business.request.CreateRentalRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteRentalRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateRentalRequest;
+import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
@@ -40,23 +42,28 @@ public class RentalController {
 	}
 
 	@GetMapping("/get/{id}")
-	public DataResult<RentalDto> get(@RequestParam int id) {
+	public DataResult<RentalDto> get(@RequestParam int id) throws BusinessException {
 		return rentalService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public Result add(@RequestBody @Valid CreateRentalRequest createRentalRequest) {
+	public Result add(@RequestBody @Valid CreateRentalRequest createRentalRequest) throws BusinessException {
 		return rentalService.add(createRentalRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteRentalRequest deleteRentalRequest) {
+	public Result delete(@RequestBody @Valid DeleteRentalRequest deleteRentalRequest) throws BusinessException {
 		return rentalService.delete(deleteRentalRequest);
 	}
 
 	@PutMapping("/update")
-	public Result delete(@RequestBody @Valid UpdateRentalRequest updateRentalRequest) {
+	public Result delete(@RequestBody @Valid UpdateRentalRequest updateRentalRequest) throws BusinessException {
 		return rentalService.update(updateRentalRequest);
+	}
+
+	@GetMapping("/getAllByCar/{id}")
+	public DataResult<List<ListRentalDto>> getAllByCar(@RequestParam int id) throws BusinessException {
+		return rentalService.getAllByCar(id);
 	}
 
 }

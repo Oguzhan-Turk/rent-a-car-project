@@ -10,6 +10,7 @@ import com.oguzhanturk.rentacar.business.dtos.ListCarDto;
 import com.oguzhanturk.rentacar.business.request.CreateCarRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteCarRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateCarRequest;
+import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
@@ -17,20 +18,22 @@ public interface CarService {
 
 	DataResult<List<ListCarDto>> getAll();
 
-	DataResult<CarDto> getById(int id);
+	DataResult<CarDto> getById(int id) throws BusinessException;
 
 	Result add(CreateCarRequest createCarRequest);
 
-	Result delete(DeleteCarRequest deleteCarRequest);
+	Result delete(DeleteCarRequest deleteCarRequest) throws BusinessException;
 
 //	Result delete(int carId);
 
-	Result update(UpdateCarRequest updateCarRequest);
+	Result update(UpdateCarRequest updateCarRequest) throws BusinessException;
 
 	DataResult<List<ListCarDto>> getByDailyPriceLessThan(BigDecimal maxDailyPrice);
 
 	DataResult<List<ListCarDto>> getAllPaged(int pageNo, int pageSize);
 
 	DataResult<List<ListCarDto>> getAllSorted(Sort.Direction direction);
+
+	void checkIfCarExistById(int carId) throws BusinessException;
 
 }

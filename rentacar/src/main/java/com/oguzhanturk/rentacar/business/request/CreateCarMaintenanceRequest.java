@@ -17,7 +17,7 @@ public class CreateCarMaintenanceRequest {
 	@Size(min = 3, message = "Maintenance Description should have at least 3 characters")
 	private String maintenanceDescription;
 
-//	private LocalDateTime returnDate;
+//	private LocalDate returnDate;
 
 	@Min(value = 1, message = "Car id should be positive integer")
 	private int carId;

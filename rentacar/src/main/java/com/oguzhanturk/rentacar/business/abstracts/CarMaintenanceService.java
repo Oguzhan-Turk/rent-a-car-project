@@ -7,6 +7,7 @@ import com.oguzhanturk.rentacar.business.dtos.ListCarMaintenanceDto;
 import com.oguzhanturk.rentacar.business.request.CreateCarMaintenanceRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteCarMaintenanceRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateCarMaintenanceRequest;
+import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
@@ -14,14 +15,14 @@ public interface CarMaintenanceService {
 
 	DataResult<List<ListCarMaintenanceDto>> getAll();
 
-	DataResult<CarMaintenanceDto> getById(int id);
+	DataResult<CarMaintenanceDto> getById(int id) throws BusinessException;
 
-	Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest);
+	Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest) throws BusinessException;
 
-	Result update(UpdateCarMaintenanceRequest updateCarMaintenanceRequest);
+	Result update(UpdateCarMaintenanceRequest updateCarMaintenanceRequest) throws BusinessException;
 
-	Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest);
+	Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) throws BusinessException;
 	
-	DataResult<List<ListCarMaintenanceDto>> getAllByCar(int id);
+	DataResult<List<ListCarMaintenanceDto>> getAllByCar(int id) throws BusinessException;
 
 }

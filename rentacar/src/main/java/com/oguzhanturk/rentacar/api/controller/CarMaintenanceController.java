@@ -20,6 +20,7 @@ import com.oguzhanturk.rentacar.business.dtos.ListCarMaintenanceDto;
 import com.oguzhanturk.rentacar.business.request.CreateCarMaintenanceRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteCarMaintenanceRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateCarMaintenanceRequest;
+import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
@@ -40,27 +41,30 @@ public class CarMaintenanceController {
 	}
 
 	@GetMapping("/get/{id}")
-	public DataResult<CarMaintenanceDto> get(@RequestParam int id) {
+	public DataResult<CarMaintenanceDto> get(@RequestParam int id) throws BusinessException {
 		return carMaintenanceService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public Result add(@RequestBody @Valid CreateCarMaintenanceRequest createCarMaintenanceRequest) {
+	public Result add(@RequestBody @Valid CreateCarMaintenanceRequest createCarMaintenanceRequest)
+			throws BusinessException {
 		return carMaintenanceService.add(createCarMaintenanceRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) {
+	public Result delete(@RequestBody @Valid DeleteCarMaintenanceRequest deleteCarMaintenanceRequest)
+			throws BusinessException {
 		return carMaintenanceService.delete(deleteCarMaintenanceRequest);
 	}
 
 	@PutMapping("/update")
-	public Result delete(@RequestBody @Valid UpdateCarMaintenanceRequest updateCarMaintenanceRequest) {
+	public Result delete(@RequestBody @Valid UpdateCarMaintenanceRequest updateCarMaintenanceRequest)
+			throws BusinessException {
 		return carMaintenanceService.update(updateCarMaintenanceRequest);
 	}
 
 	@GetMapping("/getAllByCar/{id}")
-	public DataResult<List<ListCarMaintenanceDto>> getAllByCar(@RequestParam int id) {
+	public DataResult<List<ListCarMaintenanceDto>> getAllByCar(@RequestParam int id) throws BusinessException {
 		return carMaintenanceService.getAllByCar(id);
 	}
 

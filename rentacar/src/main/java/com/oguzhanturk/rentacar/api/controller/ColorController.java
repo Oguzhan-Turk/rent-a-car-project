@@ -20,6 +20,7 @@ import com.oguzhanturk.rentacar.business.dtos.ListColorDto;
 import com.oguzhanturk.rentacar.business.request.CreateColorRequest;
 import com.oguzhanturk.rentacar.business.request.DeleteColorRequest;
 import com.oguzhanturk.rentacar.business.request.UpdateColorRequest;
+import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
@@ -40,25 +41,24 @@ public class ColorController {
 	}
 
 	@GetMapping("/get/{id}")
-	public DataResult<ColorDto> get(@RequestParam int id) {
+	public DataResult<ColorDto> get(@RequestParam int id) throws BusinessException {
 		return colorService.getById(id);
 	}
 
 	@PostMapping("/save")
-	public Result add(@RequestBody @Valid CreateColorRequest createColorRequest) {
+	public Result add(@RequestBody @Valid CreateColorRequest createColorRequest) throws BusinessException {
 		return colorService.add(createColorRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody @Valid DeleteColorRequest deleteColorRequest) {
+	public Result delete(@RequestBody @Valid DeleteColorRequest deleteColorRequest) throws BusinessException {
 		return colorService.delete(deleteColorRequest);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody @Valid UpdateColorRequest updateColorRequest) {
+	public Result update(@RequestBody @Valid UpdateColorRequest updateColorRequest) throws BusinessException {
 		return colorService.update(updateColorRequest);
 	}
-
 
 //
 //	@PostMapping("/save")
