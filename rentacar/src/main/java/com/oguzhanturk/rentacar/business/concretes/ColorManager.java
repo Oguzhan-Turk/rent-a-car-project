@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.ColorService;
-import com.oguzhanturk.rentacar.business.dtos.ColorDto;
-import com.oguzhanturk.rentacar.business.dtos.ListColorDto;
-import com.oguzhanturk.rentacar.business.request.CreateColorRequest;
-import com.oguzhanturk.rentacar.business.request.DeleteColorRequest;
-import com.oguzhanturk.rentacar.business.request.UpdateColorRequest;
+import com.oguzhanturk.rentacar.business.dtos.color.ColorDto;
+import com.oguzhanturk.rentacar.business.dtos.color.ListColorDto;
+import com.oguzhanturk.rentacar.business.request.color.CreateColorRequest;
+import com.oguzhanturk.rentacar.business.request.color.DeleteColorRequest;
+import com.oguzhanturk.rentacar.business.request.color.UpdateColorRequest;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;

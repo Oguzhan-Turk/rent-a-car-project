@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oguzhanturk.rentacar.business.abstracts.CarMaintenanceService;
-import com.oguzhanturk.rentacar.business.dtos.CarMaintenanceDto;
-import com.oguzhanturk.rentacar.business.dtos.ListCarMaintenanceDto;
-import com.oguzhanturk.rentacar.business.request.CreateCarMaintenanceRequest;
-import com.oguzhanturk.rentacar.business.request.DeleteCarMaintenanceRequest;
-import com.oguzhanturk.rentacar.business.request.UpdateCarMaintenanceRequest;
+import com.oguzhanturk.rentacar.business.dtos.maintenance.CarMaintenanceDto;
+import com.oguzhanturk.rentacar.business.dtos.maintenance.ListCarMaintenanceDto;
+import com.oguzhanturk.rentacar.business.request.maintenance.CreateCarMaintenanceRequest;
+import com.oguzhanturk.rentacar.business.request.maintenance.DeleteCarMaintenanceRequest;
+import com.oguzhanturk.rentacar.business.request.maintenance.UpdateCarMaintenanceRequest;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;

@@ -2,11 +2,11 @@ package com.oguzhanturk.rentacar.business.abstracts;
 
 import java.util.List;
 
-import com.oguzhanturk.rentacar.business.dtos.BrandDto;
-import com.oguzhanturk.rentacar.business.dtos.ListBrandDto;
-import com.oguzhanturk.rentacar.business.request.CreateBrandRequest;
-import com.oguzhanturk.rentacar.business.request.DeleteBrandRequest;
-import com.oguzhanturk.rentacar.business.request.UpdateBrandRequest;
+import com.oguzhanturk.rentacar.business.dtos.brand.BrandDto;
+import com.oguzhanturk.rentacar.business.dtos.brand.ListBrandDto;
+import com.oguzhanturk.rentacar.business.request.brand.CreateBrandRequest;
+import com.oguzhanturk.rentacar.business.request.brand.DeleteBrandRequest;
+import com.oguzhanturk.rentacar.business.request.brand.UpdateBrandRequest;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;

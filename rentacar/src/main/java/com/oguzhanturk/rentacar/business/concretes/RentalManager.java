@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import com.oguzhanturk.rentacar.business.abstracts.CarMaintenanceService;
 import com.oguzhanturk.rentacar.business.abstracts.CarService;
 import com.oguzhanturk.rentacar.business.abstracts.RentalService;
-import com.oguzhanturk.rentacar.business.dtos.ListRentalDto;
-import com.oguzhanturk.rentacar.business.dtos.RentalDto;
-import com.oguzhanturk.rentacar.business.request.CreateRentalRequest;
-import com.oguzhanturk.rentacar.business.request.DeleteRentalRequest;
-import com.oguzhanturk.rentacar.business.request.UpdateRentalRequest;
+import com.oguzhanturk.rentacar.business.dtos.rental.ListRentalDto;
+import com.oguzhanturk.rentacar.business.dtos.rental.RentalDto;
+import com.oguzhanturk.rentacar.business.request.rental.CreateRentalRequest;
+import com.oguzhanturk.rentacar.business.request.rental.DeleteRentalRequest;
+import com.oguzhanturk.rentacar.business.request.rental.UpdateRentalRequest;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
@@ -69,14 +69,11 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result update(UpdateRentalRequest updateRentalRequest) throws BusinessException {
+
 		checkIfRentalExistsById(updateRentalRequest.getRentId());
-		// TODO check **
 
 		Rental foundRental = rentalDao.getById(updateRentalRequest.getRentId());
-//		if (foundRental == null)
-//			return new ErrorResult("The rental was not found!");
 		checkIfAvailableForReturn(foundRental.getCar().getCarId());
-
 		foundRental.setReturnDate(updateRentalRequest.getReturnDate());
 //		Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
 		rentalDao.save(foundRental);
@@ -103,9 +100,9 @@ public class RentalManager implements RentalService {
 		return new SuccessDataResult<List<ListRentalDto>>(response);
 	}
 
-	// TODO check this
 	@Override
 	public boolean isCarAlreadyRented(int carId) {
+		// TODO will be check
 		Rental lastRentalById = rentalDao.findFirstByCarCarIdOrderByRentDate(carId);
 		return Objects.nonNull(lastRentalById) && Objects.isNull(lastRentalById.getReturnDate());
 	}

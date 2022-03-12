@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import com.oguzhanturk.rentacar.business.abstracts.CarMaintenanceService;
 import com.oguzhanturk.rentacar.business.abstracts.CarService;
 import com.oguzhanturk.rentacar.business.abstracts.RentalService;
-import com.oguzhanturk.rentacar.business.dtos.CarMaintenanceDto;
-import com.oguzhanturk.rentacar.business.dtos.ListCarMaintenanceDto;
-import com.oguzhanturk.rentacar.business.request.CreateCarMaintenanceRequest;
-import com.oguzhanturk.rentacar.business.request.DeleteCarMaintenanceRequest;
-import com.oguzhanturk.rentacar.business.request.UpdateCarMaintenanceRequest;
+import com.oguzhanturk.rentacar.business.dtos.maintenance.CarMaintenanceDto;
+import com.oguzhanturk.rentacar.business.dtos.maintenance.ListCarMaintenanceDto;
+import com.oguzhanturk.rentacar.business.request.maintenance.CreateCarMaintenanceRequest;
+import com.oguzhanturk.rentacar.business.request.maintenance.DeleteCarMaintenanceRequest;
+import com.oguzhanturk.rentacar.business.request.maintenance.UpdateCarMaintenanceRequest;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
@@ -75,9 +75,8 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 //		carService.checkIfCarExistsById(createCarMaintenanceRequest.getCarId());
 
-		if (rentalService.isCarAlreadyRented(createCarMaintenanceRequest.getCarId())) {
-			throw new BusinessException("The car is rented!");
-		}
+		checkIfAvailableForMaintenance(createCarMaintenanceRequest.getCarId());
+
 		CarMaintenance carMaintenance = modelMapperService.forRequest().map(createCarMaintenanceRequest,
 				CarMaintenance.class);
 		carMaintenance.setMaintenanceId(0);
@@ -90,9 +89,16 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 		checkIfMaintenanceExistsById(updateCarMaintenanceRequest.getMaintenanceId());
 
-		CarMaintenance carMaintenance = modelMapperService.forRequest().map(updateCarMaintenanceRequest,
-				CarMaintenance.class);
-		carMaintenanceDao.save(carMaintenance);
+		CarMaintenance foundById = carMaintenanceDao.getById(updateCarMaintenanceRequest.getMaintenanceId());
+		foundById.setReturnDate(updateCarMaintenanceRequest.getReturnDate());
+		carMaintenanceDao.save(foundById);
+		
+		/*
+		 * CarMaintenance carMaintenance =
+		 * modelMapperService.forRequest().map(updateCarMaintenanceRequest,
+		 * CarMaintenance.class); carMaintenanceDao.save(carMaintenance);
+		 */
+
 		return new SuccessResult();
 	}
 
@@ -136,6 +142,12 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 			}
 		}
 		return false;
+	}
+
+	private void checkIfAvailableForMaintenance(int carId) throws BusinessException {
+		if (rentalService.isCarAlreadyRented(carId)) {
+			throw new BusinessException("The car is rented!");
+		}
 	}
 
 	private void checkIfMaintenanceExistsById(int maintanenceId) throws BusinessException {

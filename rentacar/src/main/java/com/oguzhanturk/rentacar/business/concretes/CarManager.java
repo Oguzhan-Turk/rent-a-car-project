@@ -12,11 +12,11 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.CarService;
-import com.oguzhanturk.rentacar.business.dtos.CarDto;
-import com.oguzhanturk.rentacar.business.dtos.ListCarDto;
-import com.oguzhanturk.rentacar.business.request.CreateCarRequest;
-import com.oguzhanturk.rentacar.business.request.DeleteCarRequest;
-import com.oguzhanturk.rentacar.business.request.UpdateCarRequest;
+import com.oguzhanturk.rentacar.business.dtos.car.CarDto;
+import com.oguzhanturk.rentacar.business.dtos.car.ListCarDto;
+import com.oguzhanturk.rentacar.business.request.car.CreateCarRequest;
+import com.oguzhanturk.rentacar.business.request.car.DeleteCarRequest;
+import com.oguzhanturk.rentacar.business.request.car.UpdateCarRequest;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
