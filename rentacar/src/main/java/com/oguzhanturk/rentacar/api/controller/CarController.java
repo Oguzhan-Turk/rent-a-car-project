@@ -57,11 +57,6 @@ public class CarController {
 		return carService.delete(deleteCarRequest);
 	}
 
-//	@DeleteMapping("/delete/{cardId}")
-//	public Result delete(@PathVariable int carId) {
-//		return carService.delete(carId);
-//	}
-
 	@PutMapping("/update")
 	public Result delete(@RequestBody @Valid UpdateCarRequest updateCarRequest) throws BusinessException {
 		return carService.update(updateCarRequest);
