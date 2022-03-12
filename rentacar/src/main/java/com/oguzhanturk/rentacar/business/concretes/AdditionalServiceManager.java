@@ -59,6 +59,7 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 	public Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException {
 		AdditionalService additionalService = modelMapperService.forRequest().map(createAdditionalServiceRequest,
 				AdditionalService.class);
+		additionalService.setAdditionalId(0);
 		additionalServiceDao.save(additionalService);
 		return new SuccessResult("additionalService.Added");
 	}
