@@ -24,8 +24,6 @@ public interface CarService {
 
 	Result delete(DeleteCarRequest deleteCarRequest) throws BusinessException;
 
-//	Result delete(int carId);
-
 	Result update(UpdateCarRequest updateCarRequest) throws BusinessException;
 
 	DataResult<List<ListCarDto>> getByDailyPriceLessThan(BigDecimal maxDailyPrice);
@@ -34,6 +32,8 @@ public interface CarService {
 
 	DataResult<List<ListCarDto>> getAllSorted(Sort.Direction direction);
 
-	void checkIfCarExistById(int carId) throws BusinessException;
+	boolean isCarExistsById(int carId);
+
+//	void checkIfCarExistsById(int carId) throws BusinessException;
 
 }
