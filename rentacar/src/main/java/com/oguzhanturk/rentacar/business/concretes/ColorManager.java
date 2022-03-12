@@ -15,7 +15,6 @@ import com.oguzhanturk.rentacar.business.request.UpdateColorRequest;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
-import com.oguzhanturk.rentacar.core.utilities.results.ErrorResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 import com.oguzhanturk.rentacar.core.utilities.results.SuccessDataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.SuccessResult;
