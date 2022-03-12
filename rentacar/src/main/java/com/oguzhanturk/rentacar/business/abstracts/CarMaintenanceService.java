@@ -1,5 +1,6 @@
 package com.oguzhanturk.rentacar.business.abstracts;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.oguzhanturk.rentacar.business.dtos.CarMaintenanceDto;
@@ -24,5 +25,7 @@ public interface CarMaintenanceService {
 	Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) throws BusinessException;
 	
 	DataResult<List<ListCarMaintenanceDto>> getAllByCar(int id) throws BusinessException;
+
+	boolean isCarInMaintenance(int carId, LocalDate rentDate) throws BusinessException;
 
 }
