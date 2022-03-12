@@ -20,7 +20,6 @@ import com.oguzhanturk.rentacar.business.request.UpdateCarRequest;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
 import com.oguzhanturk.rentacar.core.utilities.mapping.ModelMapperService;
 import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
-import com.oguzhanturk.rentacar.core.utilities.results.ErrorResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 import com.oguzhanturk.rentacar.core.utilities.results.SuccessDataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.SuccessResult;
@@ -49,7 +48,7 @@ public class CarManager implements CarService {
 
 	@Override
 	public DataResult<CarDto> getById(int id) throws BusinessException {
-		checkIfCarExistById(id);
+		checkIfCarExistsById(id);
 		Car car = carDao.getById(id);
 		CarDto response = modelMapperService.forDto().map(car, CarDto.class);
 		return new SuccessDataResult<CarDto>(response);
@@ -64,19 +63,14 @@ public class CarManager implements CarService {
 
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) throws BusinessException {
-		checkIfCarExistById(deleteCarRequest.getCarId());
+		checkIfCarExistsById(deleteCarRequest.getCarId());
 		carDao.deleteById(deleteCarRequest.getCarId());
 		return new SuccessResult();
 	}
 
-//	@Override
-//	public Result delete(int carId) {
-//		delete(DeleteCarRequest.builder().carId(carId).build());
-//	}
-
 	@Override
 	public Result update(UpdateCarRequest updateCarRequest) throws BusinessException {
-		checkIfCarExistById(updateCarRequest.getBrandId());
+		checkIfCarExistsById(updateCarRequest.getBrandId());
 		Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		carDao.save(car);
 		return new SuccessResult();
@@ -113,8 +107,15 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public void checkIfCarExistById(int carId) throws BusinessException {
-		if (!carDao.existsById(carId)) {
+	public boolean isCarExistsById(int carId) {
+		if (carDao.existsById(carId)) {
+			return true;
+		}
+		return false;
+	}
+
+	private void checkIfCarExistsById(int carId) throws BusinessException {
+		if (!isCarExistsById(carId)) {
 			throw new BusinessException("The car with id : " + carId + " was not found!");
 		}
 	}
