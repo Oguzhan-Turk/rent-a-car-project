@@ -13,5 +13,5 @@ public class UpdateAdditionalServiceRequest {
 	private String additionalServiceName;
 	private String additionalServiceDescription;
 	private int dailyPrice;
-	private int rentalId;
+//	private int rentalId;
 }
