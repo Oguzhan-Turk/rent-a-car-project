@@ -1,32 +1,32 @@
 package com.oguzhanturk.rentacar.entities.concretes;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.oguzhanturk.rentacar.entities.abstracts.Customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "customers")
-@Entity
-public class Customer {
+@Table(name = "corporate_customers")
+public class CorporateCustomer extends Customer {
 
-	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "customer_id")
-	private int customerId;
+	@Column(name = "id")
+	private int id;
 
-	@OneToMany(mappedBy = "customer")
-	private List<Rental> rentals;
+	@Column(name = "corporate_name")
+	private String corporateName;
+
+	@Column(name = "corporate_tax_no", unique = true)
+	private String taxNo;
 
 }
