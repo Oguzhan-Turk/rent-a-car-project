@@ -1,5 +1,6 @@
 package com.oguzhanturk.rentacar.entities.concretes;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.oguzhanturk.rentacar.entities.abstracts.Customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,21 +32,32 @@ public class Rental {
 	@Column(name = "rent_id")
 	private int rentId;
 
-	@Column(name = "rent_date")
+	@Column(name = "rent_date", nullable = false)
 	private LocalDate rentDate;
 
 	@Column(name = "return_date")
 	private LocalDate returnDate;
 
 	@ManyToOne
-	@JoinColumn(name = "car_id")
+	@JoinColumn(name = "car_id", nullable = false)
 	private Car car;
 
 	@ManyToOne
-	@JoinColumn(name = "customer_id")
+	@JoinColumn(name = "customer_id", nullable = false)
 	private Customer customer;
-	
+
 	@OneToMany(mappedBy = "rental")
 	private List<AdditionalService> orderedAdditionalServices;
+
+	@ManyToOne
+	@JoinColumn(name = "rent_city_id")
+	private City rentCity;
+
+	@ManyToOne
+	@JoinColumn(name = "return_city_id")
+	private City returnCity;
+
+	@Column(name = "rental_daily_price")
+	private BigDecimal rentalDailyPrice;
 
 }
