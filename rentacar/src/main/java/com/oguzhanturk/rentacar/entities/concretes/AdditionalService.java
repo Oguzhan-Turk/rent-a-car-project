@@ -31,7 +31,7 @@ public class AdditionalService {
 	private String name;
 
 	@Column(name = "additional_service_description")
-	private String additionalServiceDescription;
+	private String description;
 
 	@Column(name = "daily_price")
 	private BigDecimal dailyPrice;
