@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.AdditionalServiceService;
+import com.oguzhanturk.rentacar.business.abstracts.RentalService;
 import com.oguzhanturk.rentacar.business.dtos.additionalService.AdditionalServiceDto;
 import com.oguzhanturk.rentacar.business.dtos.additionalService.ListAdditionalServiceDto;
 import com.oguzhanturk.rentacar.business.request.additionalService.CreateAdditionalServiceRequest;
@@ -27,12 +28,14 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 
 	private ModelMapperService modelMapperService;
 	private AdditionalServiceDao additionalServiceDao;
+	private RentalService rentalService;
 
 	@Autowired
-	public AdditionalServiceManager(ModelMapperService modelMapperService, AdditionalServiceDao additionalServiceDao) {
-		super();
+	public AdditionalServiceManager(ModelMapperService modelMapperService, AdditionalServiceDao additionalServiceDao,
+			RentalService rentalService) {
 		this.modelMapperService = modelMapperService;
 		this.additionalServiceDao = additionalServiceDao;
+		this.rentalService = rentalService;
 	}
 
 	@Override
@@ -59,7 +62,8 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 	public Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException {
 		AdditionalService additionalService = modelMapperService.forRequest().map(createAdditionalServiceRequest,
 				AdditionalService.class);
-		additionalService.setAdditionalId(0);
+
+//		additionalService.setAdditionalId(0);
 		additionalServiceDao.save(additionalService);
 		return new SuccessResult("additionalService.Added");
 	}
@@ -75,20 +79,23 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 	}
 
 	@Override
+	public Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException {
+		AdditionalService additionalService = modelMapperService.forRequest().map(updateAdditionalServiceRequest,
+				AdditionalService.class);
+//		AdditionalService additionalService = additionalServiceDao.getById(updateAdditionalServiceRequest.getAdditionalId());
+		isExistById(updateAdditionalServiceRequest.getAdditionalId());
+//		additionalService.setDailyPrice(updateAdditionalServiceRequest.getDailyPrice());
+//		additionalService.setDescription(updateAdditionalServiceRequest.getDescription());
+//		additionalService.setName(updateAdditionalServiceRequest.getName());
+		additionalServiceDao.save(additionalService);
+		return new SuccessResult("additionalService.Updated");
+	}
+
+	@Override
 	public Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws BusinessException {
 		isExistById(deleteAdditionalServiceRequest.getAdditionalId());
 		additionalServiceDao.deleteById(deleteAdditionalServiceRequest.getAdditionalId());
 		return new SuccessResult();
-	}
-
-	@Override
-	public Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException {
-		AdditionalService additionalService = modelMapperService.forRequest().map(updateAdditionalServiceRequest,
-				AdditionalService.class);
-		isExistById(updateAdditionalServiceRequest.getAdditionalId());
-
-		this.additionalServiceDao.save(additionalService);
-		return new SuccessResult("additionalService.Updated");
 	}
 
 	private boolean isExistById(int additionalServiceId) throws BusinessException {
