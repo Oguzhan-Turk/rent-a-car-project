@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oguzhanturk.rentacar.business.abstracts.RentalService;
-import com.oguzhanturk.rentacar.business.dtos.maintenance.ListCarMaintenanceDto;
 import com.oguzhanturk.rentacar.business.dtos.rental.ListRentalDto;
 import com.oguzhanturk.rentacar.business.dtos.rental.RentalDto;
 import com.oguzhanturk.rentacar.business.request.rental.CreateRentalRequest;
