@@ -1,5 +1,6 @@
 package com.oguzhanturk.rentacar.business.concretes;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -23,6 +24,7 @@ import com.oguzhanturk.rentacar.core.utilities.results.Result;
 import com.oguzhanturk.rentacar.core.utilities.results.SuccessDataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.SuccessResult;
 import com.oguzhanturk.rentacar.dataAccess.abstracts.RentalDao;
+import com.oguzhanturk.rentacar.entities.concretes.AdditionalService;
 import com.oguzhanturk.rentacar.entities.concretes.Rental;
 
 @Service
@@ -63,6 +65,7 @@ public class RentalManager implements RentalService {
 	public Result add(CreateRentalRequest createRentalRequest) throws BusinessException {
 		checkIfAvailableForRent(createRentalRequest.getCarId(), createRentalRequest.getRentDate());
 		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
+		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental.getRentId()));
 		rentalDao.save(rental);
 		return new SuccessResult();
 	}
@@ -72,11 +75,14 @@ public class RentalManager implements RentalService {
 
 		checkIfRentalExistsById(updateRentalRequest.getRentId());
 
-		Rental foundRental = rentalDao.getById(updateRentalRequest.getRentId());
-		checkIfAvailableForReturn(foundRental.getCar().getCarId());
-		foundRental.setReturnDate(updateRentalRequest.getReturnDate());
-//		Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
-		rentalDao.save(foundRental);
+//		Rental foundRental = rentalDao.getById(updateRentalRequest.getRentId());
+//		checkIfAvailableForReturn(foundRental.getCar().getCarId());
+//		foundRental.setReturnDate(updateRentalRequest.getReturnDate());
+
+		Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
+		checkIfAvailableForReturn(rental.getCar().getCarId());
+		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental.getRentId()));
+		rentalDao.save(rental);
 		return new SuccessResult();
 	}
 
@@ -136,6 +142,19 @@ public class RentalManager implements RentalService {
 		if (rentalDao.existsById(rentalId)) {
 			new BusinessException("The rental was not found!");
 		}
+	}
+
+	private BigDecimal calculateRentalDailyPrice(int rentId) {
+		Rental rental = this.rentalDao.getById(rentId);
+		BigDecimal totalPrice = rental.getCar().getDailyPrice();
+
+		for (AdditionalService rentedService : rental.getOrderedAdditionalServices()) {
+			totalPrice = totalPrice.add(rentedService.getDailyPrice());
+		}
+		if (rental.getRentCity() != rental.getReturnCity()) {
+			totalPrice.add(new BigDecimal(750));
+		}
+		return totalPrice;
 	}
 
 }
