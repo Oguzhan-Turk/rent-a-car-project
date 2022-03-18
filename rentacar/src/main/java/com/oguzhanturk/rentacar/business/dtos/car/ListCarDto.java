@@ -15,8 +15,9 @@ public class ListCarDto {
 	private BigDecimal dailyPrice;
 	private int modelYear;
 	private String description;
+	private double kilometer;
 
 	private String brandName;
 	private String colorName;
-	
+
 }
