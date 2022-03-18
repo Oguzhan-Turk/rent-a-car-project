@@ -33,4 +33,7 @@ public class CreateCarRequest {
 
 	@Min(value = 1, message = "Color id should be positive integer")
 	private int colorId;
+
+	@Min(value = 0)
+	private double kilometer;
 }

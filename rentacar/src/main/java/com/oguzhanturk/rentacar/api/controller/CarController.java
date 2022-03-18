@@ -58,7 +58,7 @@ public class CarController {
 	}
 
 	@PutMapping("/update")
-	public Result delete(@RequestBody @Valid UpdateCarRequest updateCarRequest) throws BusinessException {
+	public Result update(@RequestBody @Valid UpdateCarRequest updateCarRequest) throws BusinessException {
 		return carService.update(updateCarRequest);
 	}
 

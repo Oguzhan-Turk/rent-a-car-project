@@ -43,7 +43,7 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public DataResult<BrandDto> getById(int id) throws BusinessException {
-		isExistById(id);
+		checkIfExistsById(id);
 		Brand brand = brandDao.getById(id);
 		BrandDto response = modelMapperService.forDto().map(brand, BrandDto.class);
 		return new SuccessDataResult<BrandDto>(response);
@@ -59,14 +59,14 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public Result delete(DeleteBrandRequest deleteBrandRequest) throws BusinessException {
-		isExistById(deleteBrandRequest.getBrandId());
+		checkIfExistsById(deleteBrandRequest.getBrandId());
 		brandDao.deleteById(deleteBrandRequest.getBrandId());
 		return new SuccessResult();
 	}
 
 	@Override
 	public Result update(UpdateBrandRequest updateBrandRequest) throws BusinessException {
-		isExistById(updateBrandRequest.getBrandId());
+		checkIfExistsById(updateBrandRequest.getBrandId());
 		checkIfNameIsExist(updateBrandRequest.getBrandName());
 		Brand brand = modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 		brandDao.save(brand);
@@ -80,11 +80,10 @@ public class BrandManager implements BrandService {
 		}
 	}
 
-	private boolean isExistById(int brandId) throws BusinessException {
-		if (brandDao.existsById(brandId)) {
-			return true;
+	private void checkIfExistsById(int brandId) throws BusinessException {
+		if (!brandDao.existsById(brandId)) {
+			throw new BusinessException("The brand with id : " + brandId + " was not found!");
 		}
-		throw new BusinessException("The brand with id : " + brandId + " was not found!");
 	}
 
 }

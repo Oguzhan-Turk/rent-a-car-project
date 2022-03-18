@@ -43,7 +43,7 @@ public class ColorManager implements ColorService {
 
 	@Override
 	public DataResult<ColorDto> getById(int id) throws BusinessException {
-		isExistById(id);
+		checkIfExistsById(id);
 		Color color = colorDao.getById(id);
 		ColorDto response = modelMapperService.forDto().map(color, ColorDto.class);
 		return new SuccessDataResult<ColorDto>(response);
@@ -59,14 +59,14 @@ public class ColorManager implements ColorService {
 
 	@Override
 	public Result delete(DeleteColorRequest deleteColorRequest) throws BusinessException {
-		isExistById(deleteColorRequest.getColorId());
+		checkIfExistsById(deleteColorRequest.getColorId());
 		colorDao.deleteById(deleteColorRequest.getColorId());
 		return new SuccessResult();
 	}
 
 	@Override
 	public Result update(UpdateColorRequest updateColorRequest) throws BusinessException {
-		isExistById(updateColorRequest.getColorId());
+		checkIfExistsById(updateColorRequest.getColorId());
 		checkIfNameIsExist(updateColorRequest.getColorName());
 		Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
 		colorDao.save(color);
@@ -79,11 +79,10 @@ public class ColorManager implements ColorService {
 		}
 	}
 
-	private boolean isExistById(int colorId) throws BusinessException {
-		if (colorDao.existsById(colorId)) {
-			return true;
+	private void checkIfExistsById(int colorId) throws BusinessException {
+		if (!colorDao.existsById(colorId)) {
+			throw new BusinessException("The color with id : " + colorId + " was not found!");
 		}
-		throw new BusinessException("The color with id : " + colorId + " was not found!");
 	}
 
 }

@@ -70,7 +70,7 @@ public class CarManager implements CarService {
 
 	@Override
 	public Result update(UpdateCarRequest updateCarRequest) throws BusinessException {
-		checkIfCarExistsById(updateCarRequest.getBrandId());
+		checkIfCarExistsById(updateCarRequest.getCarId());
 		Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		carDao.save(car);
 		return new SuccessResult();

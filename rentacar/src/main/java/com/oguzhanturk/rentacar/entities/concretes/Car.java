@@ -42,7 +42,10 @@ public class Car {
 	@ManyToOne
 	@JoinColumn(name = "color_id")
 	private Color color;
-	
+
+	@Column(name = "kilometer")
+	private double kilometer;
+
 	@ManyToOne
 	@JoinColumn(name = "city_id")
 	private City city;
