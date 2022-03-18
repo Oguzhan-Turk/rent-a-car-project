@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "individual_customers")
 public class IndividualCustomer extends Customer {
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Column(name = "id")
+//	private int id;
 
 	@Column(name = "national_identity", unique = true)
 	private String nationalIdentity;

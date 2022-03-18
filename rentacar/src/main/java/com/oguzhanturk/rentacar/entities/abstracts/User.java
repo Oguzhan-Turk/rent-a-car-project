@@ -23,8 +23,8 @@ public abstract class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+	@Column(name = "userId")
+	private int userId;
 
 	@Column(name = "email", unique = true)
 	private String email;

@@ -13,19 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateIndividualCustomerRequest {
 
-	@NotEmpty
 	@Size(min = 11, max = 11)
 	private String nationalIdentity;
 
-	@NotEmpty
 	@Size(min = 3, max = 50)
 	private String firstname;
 
-	@NotEmpty
 	@Size(min = 2, max = 50)
 	private String lastname;
 
-	@NotEmpty
 	@Email
 	private String email;
 
