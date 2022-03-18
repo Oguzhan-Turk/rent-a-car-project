@@ -14,6 +14,5 @@ public class ListCarMaintenanceDto {
 	private int maintenanceId;
 	private String maintenanceDescription;
 	private LocalDate returnDate;
-
 	private int carId;
 }

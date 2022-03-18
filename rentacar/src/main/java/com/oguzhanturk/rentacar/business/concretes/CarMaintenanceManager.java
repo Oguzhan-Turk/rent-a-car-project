@@ -55,10 +55,12 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	}
 
 	@Override
-	public DataResult<CarMaintenanceDto> getById(int id) throws BusinessException {
-		checkIfMaintenanceExistsById(id);
-		CarMaintenance carMaintenance = carMaintenanceDao.getById(id);
+	public DataResult<CarMaintenanceDto> getById(int maintenanceId) throws BusinessException {
+		checkIfMaintenanceExistsById(maintenanceId);
+		CarMaintenance carMaintenance = carMaintenanceDao.getById(maintenanceId);
 		CarMaintenanceDto response = modelMapperService.forDto().map(carMaintenance, CarMaintenanceDto.class);
+	
+		response.setCarId(carMaintenance.getCar().getCarId());
 
 		return new SuccessDataResult<CarMaintenanceDto>(response);
 	}
@@ -125,8 +127,27 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		return new SuccessDataResult<List<ListCarMaintenanceDto>>(response);
 	}
 
+	private void checkIfAvailableForMaintenance(int carId) throws BusinessException {
+		if (!carService.isCarExistsById(carId)) {
+			throw new BusinessException("The car with id : " + carId + " was not found!");
+		}
+		if (rentalService.isCarAlreadyRented(carId)) {
+			throw new BusinessException("The car is rented!");
+		}
+		if (isCarAlreadyMaintenanced(carId)) {
+			throw new BusinessException("Car is already in maintenance!");
+		}
+	}
+
+	private void checkIfMaintenanceExistsById(int maintanenceId) throws BusinessException {
+		if (!carMaintenanceDao.existsById(maintanenceId)) {
+			throw new BusinessException("The car maintanence with id : " + maintanenceId + " was not found!");
+		}
+	}
+
+	// for rental
 	@Override
-	public boolean isCarInMaintenance(int carId, LocalDate rentDate) throws BusinessException {
+	public boolean isCarInMaintenanceForRent(int carId, LocalDate rentDate) throws BusinessException {
 		if (!carService.isCarExistsById(carId)) {
 			throw new BusinessException("The car with id : " + carId + " was not found!");
 		}
@@ -139,19 +160,16 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		return false;
 	}
 
-	private void checkIfAvailableForMaintenance(int carId) throws BusinessException {
-		if (!carService.isCarExistsById(carId)) {
-			throw new BusinessException("The car with id : " + carId + " was not found!");
-		}
-		if (rentalService.isCarAlreadyRented(carId)) {
-			throw new BusinessException("The car is rented!");
-		}
-	}
+	private boolean isCarAlreadyMaintenanced(int carId) throws BusinessException {
 
-	private void checkIfMaintenanceExistsById(int maintanenceId) throws BusinessException {
-		if (!carMaintenanceDao.existsById(maintanenceId)) {
-			throw new BusinessException("The car maintanence with id : " + maintanenceId + " was not found!");
+		List<CarMaintenance> carMaintenances = carMaintenanceDao.getAllByCarCarId(carId);
+
+		for (CarMaintenance carMaintenance : carMaintenances) {
+			if (carMaintenance.getReturnDate() == null) {
+				return true;
+			}
 		}
+		return false;
 	}
 
 }

@@ -26,6 +26,6 @@ public interface CarMaintenanceService {
 	
 	DataResult<List<ListCarMaintenanceDto>> getAllByCar(int id) throws BusinessException;
 
-	boolean isCarInMaintenance(int carId, LocalDate rentDate) throws BusinessException;
+	boolean isCarInMaintenanceForRent(int carId, LocalDate rentDate) throws BusinessException;
 
 }
