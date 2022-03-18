@@ -49,11 +49,6 @@ public class Invoice {
 	@JoinColumn(name = "user_id")
 	private Customer customer;
 
-	//TODO check this!!
-//	@OneToOne()
-//	@JoinColumn(name = "rental_id")
-//	@Cascade(CascadeType.ALL)
-	
 	@OneToOne()
 	@JoinColumn(name = "rent_id")
 	private Rental rental;

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -70,7 +71,7 @@ public class Rental {
 	@Column(name = "rental_total_price")
 	private BigDecimal rentalTotalPrice;
 
-	@OneToOne(mappedBy = "rental")
+	@OneToOne(mappedBy = "rental", cascade = CascadeType.ALL)
 	private Invoice invoice;
 
 }
