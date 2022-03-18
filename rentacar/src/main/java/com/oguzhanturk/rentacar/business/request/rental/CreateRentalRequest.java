@@ -15,24 +15,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateRentalRequest {
 
-	@NotEmpty
 	private LocalDate rentDate;
 
-	@NotEmpty
 	@Min(value = 1)
 	private int carId;
 
-	@NotEmpty
 	@Min(value = 1)
-	private int customerId;
+	private int userId;
 
-	@NotEmpty
 	@Min(value = 1)
 	private int rentCityId;
 
-	@NotEmpty
-	@Min(value = 1)
-	private int returnCityId;
+//	@Min(value = 1)
+//	private int returnCityId;
 
 	private List<Integer> additionalServiceId;
 

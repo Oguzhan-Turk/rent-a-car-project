@@ -22,7 +22,8 @@ public class RentalDto {
 	private String returnCityName;
 	private List<ListAdditionalServiceDto> additionalServices;
 	private BigDecimal rentalDailyPrice;
-	private int customerId;
+	private BigDecimal rentalTotalPrice;
+	private int userId;
 	private int carId;
 
 }

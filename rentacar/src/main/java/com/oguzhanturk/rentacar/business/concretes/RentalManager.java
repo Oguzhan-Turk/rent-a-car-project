@@ -1,7 +1,9 @@
 package com.oguzhanturk.rentacar.business.concretes;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.CarMaintenanceService;
 import com.oguzhanturk.rentacar.business.abstracts.CarService;
+import com.oguzhanturk.rentacar.business.abstracts.CustomerService;
 import com.oguzhanturk.rentacar.business.abstracts.RentalService;
 import com.oguzhanturk.rentacar.business.dtos.rental.ListRentalDto;
 import com.oguzhanturk.rentacar.business.dtos.rental.RentalDto;
@@ -34,14 +37,16 @@ public class RentalManager implements RentalService {
 	private final ModelMapperService modelMapperService;
 	private final CarMaintenanceService carMaintenanceService;
 	private final CarService carService;
+	private final CustomerService customerService;
 
 	@Autowired
 	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService,
-			CarMaintenanceService carMaintenanceService, CarService carService) {
+			CarMaintenanceService carMaintenanceService, CarService carService, CustomerService customerService) {
 		this.rentalDao = rentalDao;
 		this.modelMapperService = modelMapperService;
 		this.carMaintenanceService = carMaintenanceService;
 		this.carService = carService;
+		this.customerService = customerService;
 	}
 
 	@Override
@@ -63,9 +68,14 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) throws BusinessException {
-		checkIfAvailableForRent(createRentalRequest.getCarId(), createRentalRequest.getRentDate());
+		checkIfAvailableForRent(createRentalRequest.getCarId(), createRentalRequest.getUserId(),
+				createRentalRequest.getRentDate());
+
 		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental.getRentId()));
+
+		rental.setStartKilometer(carService.getById(createRentalRequest.getCarId()).getData().getKilometer());
+
+//		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
 		rentalDao.save(rental);
 		return new SuccessResult();
 	}
@@ -75,13 +85,13 @@ public class RentalManager implements RentalService {
 
 		checkIfRentalExistsById(updateRentalRequest.getRentId());
 
-//		Rental foundRental = rentalDao.getById(updateRentalRequest.getRentId());
-//		checkIfAvailableForReturn(foundRental.getCar().getCarId());
-//		foundRental.setReturnDate(updateRentalRequest.getReturnDate());
-
 		Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
 		checkIfAvailableForReturn(rental.getCar().getCarId());
-		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental.getRentId()));
+
+//		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
+//
+//		rental.setRentalTotalPrice(calculateRentalTotalPrice(updateRentalRequest.getRentId()));
+
 		rentalDao.save(rental);
 		return new SuccessResult();
 	}
@@ -113,15 +123,18 @@ public class RentalManager implements RentalService {
 		return Objects.nonNull(lastRentalById) && Objects.isNull(lastRentalById.getReturnDate());
 	}
 
-	private void checkIfAvailableForRent(int carId, LocalDate rentDate) throws BusinessException {
+	private void checkIfAvailableForRent(int carId, int customerId, LocalDate rentDate) throws BusinessException {
 
+		if (!customerService.isExistById(customerId)) {
+			throw new BusinessException("The customer with id : " + customerId + " was not found!");
+		}
 		if (!carService.isCarExistsById(carId)) {
 			throw new BusinessException("The car with id : " + carId + " was not found!");
 		}
 		if (isCarAlreadyRented(carId)) {
 			throw new BusinessException("The car is already rented");
 		}
-		if (carMaintenanceService.isCarInMaintenance(carId, rentDate)) {
+		if (carMaintenanceService.isCarInMaintenanceForRent(carId, rentDate)) {
 			throw new BusinessException("The car is under maintenance");
 		}
 
@@ -132,9 +145,9 @@ public class RentalManager implements RentalService {
 		if (!carService.isCarExistsById(carId)) {
 			throw new BusinessException("The car with id : " + carId + " was not found!");
 		}
-		if (!isCarAlreadyRented(carId)) {
-			throw new BusinessException("The car is already returned");
-		}
+//		if (!isCarAlreadyRented(carId)) {
+//			throw new BusinessException("The car is already returned");
+//		}
 
 	}
 
@@ -144,17 +157,43 @@ public class RentalManager implements RentalService {
 		}
 	}
 
-	private BigDecimal calculateRentalDailyPrice(int rentId) {
-		Rental rental = this.rentalDao.getById(rentId);
+	private BigDecimal calculateRentalDailyPrice(Rental rental) {
+//		Rental rental = this.rentalDao.getById(rentId);
 		BigDecimal totalPrice = rental.getCar().getDailyPrice();
 
+//		for (int i = 0; i < rental.getOrderedAdditionalServices().size(); i++) {
+//			totalPrice.add(rental.getOrderedAdditionalServices().get(i).getDailyPrice());
+//		}
+
 		for (AdditionalService rentedService : rental.getOrderedAdditionalServices()) {
-			totalPrice = totalPrice.add(rentedService.getDailyPrice());
-		}
-		if (rental.getRentCity() != rental.getReturnCity()) {
-			totalPrice.add(new BigDecimal(750));
+			totalPrice.add(rentedService.getDailyPrice());
 		}
 		return totalPrice;
+	}
+
+	private long calculateTotalRentDate(int rentalId) throws BusinessException {
+		Rental rental = rentalDao.getById(rentalId);
+		long totalRentDay = Duration.between(rental.getRentDate(), rental.getReturnDate()).toDays();
+		return totalRentDay;
+	}
+
+	private BigDecimal calculateRentalTotalPrice(int rentalId) throws BusinessException {
+		Rental rental = rentalDao.getById(rentalId);
+		BigDecimal totalPrice = rental.getRentalDailyPrice()
+				.multiply(BigDecimal.valueOf(calculateTotalRentDate(rentalId)));
+
+		if (!isCarReturnSameCity(rentalId)) {
+			totalPrice.add(BigDecimal.valueOf(750));
+		}
+		return totalPrice;
+	}
+
+	private boolean isCarReturnSameCity(int rentalId) {
+		Rental rental = rentalDao.getById(rentalId);
+		if (rental.getRentCity() != rental.getReturnCity()) {
+			return false;
+		}
+		return true;
 	}
 
 }
