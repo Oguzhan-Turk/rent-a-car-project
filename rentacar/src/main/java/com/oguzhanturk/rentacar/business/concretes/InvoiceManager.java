@@ -52,7 +52,7 @@ public class InvoiceManager implements InvoiceService {
 	@Override
 	public Result add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException {
 		Invoice invoice = modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
-		RentalDto rentalDto = rentalService.getById(createInvoiceRequest.getRentalId()).getData();
+		RentalDto rentalDto = rentalService.getById(createInvoiceRequest.getRentId()).getData();
 		
 		
 
@@ -76,6 +76,7 @@ public class InvoiceManager implements InvoiceService {
 	@Override
 	public Result update(UpdateInvoiceRequest updateInvoiceRequest) throws BusinessException {
 		checkIfExistsById(updateInvoiceRequest.getInvoiceNo());
+		
 		Invoice invoice = modelMapperService.forRequest().map(updateInvoiceRequest, Invoice.class);
 //		invoice.setInvoiceNo(updateInvoiceRequest.getInvoiceNo());
 

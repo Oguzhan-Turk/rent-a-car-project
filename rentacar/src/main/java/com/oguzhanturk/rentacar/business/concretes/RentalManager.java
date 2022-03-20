@@ -3,7 +3,6 @@ package com.oguzhanturk.rentacar.business.concretes;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -68,15 +67,17 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) throws BusinessException {
-		checkIfAvailableForRent(createRentalRequest.getCarId(), createRentalRequest.getUserId(),
-				createRentalRequest.getRentDate());
 
 		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
+		rental.setRentId(0);
 
-		rental.setStartKilometer(carService.getById(createRentalRequest.getCarId()).getData().getKilometer());
+		checkIfAvailableForRent(rental);
+		rental.setStartKilometer(carService.getById(createRentalRequest.getCarCarId()).getData().getKilometer());
+		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
 
-//		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
+//		System.out.println(rental.getCustomer());
 		rentalDao.save(rental);
+
 		return new SuccessResult();
 	}
 
@@ -86,11 +87,13 @@ public class RentalManager implements RentalService {
 		checkIfRentalExistsById(updateRentalRequest.getRentId());
 
 		Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
+//		System.out.println(rental.getCustomer());
+
 		checkIfAvailableForReturn(rental.getCar().getCarId());
 
-//		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
-//
-//		rental.setRentalTotalPrice(calculateRentalTotalPrice(updateRentalRequest.getRentId()));
+		rental.setStartKilometer(carService.getById(updateRentalRequest.getCarCarId()).getData().getKilometer());
+		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
+		rental.setRentalTotalPrice(calculateRentalTotalPrice(rental));
 
 		rentalDao.save(rental);
 		return new SuccessResult();
@@ -123,18 +126,18 @@ public class RentalManager implements RentalService {
 		return Objects.nonNull(lastRentalById) && Objects.isNull(lastRentalById.getReturnDate());
 	}
 
-	private void checkIfAvailableForRent(int carId, int customerId, LocalDate rentDate) throws BusinessException {
+	private void checkIfAvailableForRent(Rental rental) throws BusinessException {
 
-		if (!customerService.isExistById(customerId)) {
-			throw new BusinessException("The customer with id : " + customerId + " was not found!");
+		if (!customerService.isExistById(rental.getCustomer().getCustomerId())) {
+			throw new BusinessException("The customer was not found!");
 		}
-		if (!carService.isCarExistsById(carId)) {
-			throw new BusinessException("The car with id : " + carId + " was not found!");
+		if (!carService.isCarExistsById(rental.getCar().getCarId())) {
+			throw new BusinessException("The car was not found!");
 		}
-		if (isCarAlreadyRented(carId)) {
+		if (isCarAlreadyRented(rental.getCar().getCarId())) {
 			throw new BusinessException("The car is already rented");
 		}
-		if (carMaintenanceService.isCarInMaintenanceForRent(carId, rentDate)) {
+		if (carMaintenanceService.isCarInMaintenanceForRent(rental.getCar().getCarId(), rental.getRentDate())) {
 			throw new BusinessException("The car is under maintenance");
 		}
 
@@ -145,55 +148,55 @@ public class RentalManager implements RentalService {
 		if (!carService.isCarExistsById(carId)) {
 			throw new BusinessException("The car with id : " + carId + " was not found!");
 		}
-//		if (!isCarAlreadyRented(carId)) {
-//			throw new BusinessException("The car is already returned");
-//		}
+	}
 
+	private BigDecimal calculateRentalTotalPrice(Rental rental) throws BusinessException {
+
+		BigDecimal totalPrice = calculateRentalDailyPrice(rental)
+				.multiply(BigDecimal.valueOf(calculateTotalRentDate(rental)));
+
+		if (!isCarReturnSameCity(rental)) {
+			totalPrice.add(BigDecimal.valueOf(750));
+		}
+		return totalPrice;
+	}
+
+	private BigDecimal calculateRentalDailyPrice(Rental rental) {
+		BigDecimal totalPrice = BigDecimal.valueOf(0);
+		if (Objects.nonNull(rental.getCar().getDailyPrice())) {
+			totalPrice = rental.getCar().getDailyPrice();
+			totalPrice.add(calculateAdditionalServicesDailyPrice(rental.getAdditionalServices()));
+		}
+		return totalPrice;
+	}
+
+	private long calculateTotalRentDate(Rental rental) throws BusinessException {
+		long totalRentDay = Duration.between(rental.getRentDate(), rental.getReturnDate()).toDays();
+		return totalRentDay;
+	}
+
+	private boolean isCarReturnSameCity(Rental rental) {
+		if (rental.getFromCity() != rental.getToCity()) {
+			return false;
+		}
+		return true;
+	}
+
+	private BigDecimal calculateAdditionalServicesDailyPrice(List<AdditionalService> additionalServices) {
+
+		BigDecimal totalPrice = BigDecimal.valueOf(0);
+		if (Objects.nonNull(additionalServices)) {
+			for (AdditionalService rentedService : additionalServices) {
+				totalPrice.add(rentedService.getAdditionalServiceDailyPrice());
+			}
+		}
+		return totalPrice;
 	}
 
 	private void checkIfRentalExistsById(int rentalId) throws BusinessException {
 		if (rentalDao.existsById(rentalId)) {
 			new BusinessException("The rental was not found!");
 		}
-	}
-
-	private BigDecimal calculateRentalDailyPrice(Rental rental) {
-//		Rental rental = this.rentalDao.getById(rentId);
-		BigDecimal totalPrice = rental.getCar().getDailyPrice();
-
-//		for (int i = 0; i < rental.getOrderedAdditionalServices().size(); i++) {
-//			totalPrice.add(rental.getOrderedAdditionalServices().get(i).getDailyPrice());
-//		}
-
-		for (AdditionalService rentedService : rental.getOrderedAdditionalServices()) {
-			totalPrice.add(rentedService.getDailyPrice());
-		}
-		return totalPrice;
-	}
-
-	private long calculateTotalRentDate(int rentalId) throws BusinessException {
-		Rental rental = rentalDao.getById(rentalId);
-		long totalRentDay = Duration.between(rental.getRentDate(), rental.getReturnDate()).toDays();
-		return totalRentDay;
-	}
-
-	private BigDecimal calculateRentalTotalPrice(int rentalId) throws BusinessException {
-		Rental rental = rentalDao.getById(rentalId);
-		BigDecimal totalPrice = rental.getRentalDailyPrice()
-				.multiply(BigDecimal.valueOf(calculateTotalRentDate(rentalId)));
-
-		if (!isCarReturnSameCity(rentalId)) {
-			totalPrice.add(BigDecimal.valueOf(750));
-		}
-		return totalPrice;
-	}
-
-	private boolean isCarReturnSameCity(int rentalId) {
-		Rental rental = rentalDao.getById(rentalId);
-		if (rental.getRentCity() != rental.getReturnCity()) {
-			return false;
-		}
-		return true;
 	}
 
 }
