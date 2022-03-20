@@ -16,13 +16,15 @@ public class ListInvoiceDto {
 
 	private LocalDate billingDate;
 
-//	private LocalDate rentalDate;
+	private LocalDate rentDate;
+
+	private LocalDate returnDate;
 
 	private int totalRentDay;
 
 	private BigDecimal totalPrice;
 
-	private int userId;
+	private int customerId;
 
-	private int rentalId;
+	private int rentId;
 }

@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.oguzhanturk.rentacar.business.dtos.additionalService.ListAdditionalServiceDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,12 +16,12 @@ public class ListRentalDto {
 	private int rentId;
 	private LocalDate rentDate;
 	private LocalDate returnDate;
-	private String rentCityName;
-	private String returnCityName;
-	private List<ListAdditionalServiceDto> additionalServices;
+	private String fromCityName;
+	private String toCityName;
+	private List<String> additionalServiceName;
 	private BigDecimal rentalDailyPrice;
 	private BigDecimal rentalTotalPrice;
-	private int userId;
-	private int carId;
+	private int customerId;
+	private int carCarId;
 
 }

@@ -1,5 +1,7 @@
 package com.oguzhanturk.rentacar.business.dtos.additionalService;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ListAdditionalServiceDto {
 
 	private int additionalId;
-	private String additional_service_name;
-	private int dailyPrice;
-	private int rentalId;
+	private String additionalServiceName;
+	private String additionalServiceDescription;
+	private BigDecimal additionalServiceDailyPrice;
 }
