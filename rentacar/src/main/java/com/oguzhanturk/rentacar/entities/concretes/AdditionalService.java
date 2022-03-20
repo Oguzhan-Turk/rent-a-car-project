@@ -25,16 +25,16 @@ public class AdditionalService {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "additional_service_id")
-	private int additionalId;
+	private int additionalServiceId;
 
 	@Column(name = "additional_service_name")
-	private String name;
+	private String additionalServiceName;
 
 	@Column(name = "additional_service_description")
-	private String description;
+	private String additionalServiceDescription;
 
-	@Column(name = "daily_price")
-	private BigDecimal dailyPrice;
+	@Column(name = "additional_service_daily_price")
+	private BigDecimal additionalServiceDailyPrice;
 
 	@ManyToOne
 	@JoinColumn(name = "rental_id")
