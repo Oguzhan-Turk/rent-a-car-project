@@ -31,9 +31,9 @@ public class City {
 	@OneToMany(mappedBy = "city")
 	private List<Car> cars;
 
-	@OneToMany(mappedBy = "rentCity")
-	private List<Rental> rentCityRentals;
+	@OneToMany(mappedBy = "fromCity")
+	private List<Rental> fromCityRentals;
 
-	@OneToMany(mappedBy = "returnCity")
-	private List<Rental> returnCityRentals;
+	@OneToMany(mappedBy = "toCity")
+	private List<Rental> toCityRentals;
 }

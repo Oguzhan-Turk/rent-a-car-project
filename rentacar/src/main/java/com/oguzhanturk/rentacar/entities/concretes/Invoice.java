@@ -36,8 +36,11 @@ public class Invoice {
 	@Column(name = "billing_date")
 	private LocalDate billingDate;
 
-//	@Column(name = "rental_date")
-//	private LocalDate rentalDate;
+	@Column(name = "rent_date")
+	private LocalDate rentDate;
+
+	@Column(name = "return_date")
+	private LocalDate returnDate;
 
 	@Column(name = "total_rent_day")
 	private long totalRentDay;

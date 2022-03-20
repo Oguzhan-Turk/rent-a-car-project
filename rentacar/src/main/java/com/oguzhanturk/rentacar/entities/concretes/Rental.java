@@ -51,19 +51,19 @@ public class Rental {
 	private Car car;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "customer_id")
 	private Customer customer;
 
 	@OneToMany(mappedBy = "rental")
-	private List<AdditionalService> orderedAdditionalServices;
+	private List<AdditionalService> additionalServices;
 
 	@ManyToOne
-	@JoinColumn(name = "rent_city_id")
-	private City rentCity;
+	@JoinColumn(name = "from_city_id")
+	private City fromCity;
 
 	@ManyToOne
-	@JoinColumn(name = "return_city_id")
-	private City returnCity;
+	@JoinColumn(name = "to_city_id")
+	private City toCity;
 
 	@Column(name = "rental_daily_price")
 	private BigDecimal rentalDailyPrice;
