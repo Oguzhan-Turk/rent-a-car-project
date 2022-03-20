@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 public class UpdateAdditionalServiceRequest {
 
 	private int additionalId;
-	private String name;
-	private String description;
-	private BigDecimal dailyPrice;
-	private int rentalId;
+	private String additionalServiceName;
+	private String additionalServiceDescription;
+	private BigDecimal additionalServiceDailyPrice;
 }

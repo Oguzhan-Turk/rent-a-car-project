@@ -19,26 +19,29 @@ public class UpdateRentalRequest {
 	@Min(value = 1, message = "Rent id should be positive integer")
 	private int rentId;
 
+	@NotNull
 	private LocalDate rentDate;
 
+	@NotNull
 	private LocalDate returnDate;
-	
-	private double startkilometer;
 
+	@Min(value = 1)
+	private int carCarId;
+
+	@Min(value = 1)
+	private int customerId;
+
+
+	@Min(value = 1)
 	private double returnKilometer;
 
+	@NotNull
 	@Min(value = 1)
-	private int carId;
-
-//	@Min(value = 1)
-	private int userId;
+	private int fromCityId;
 
 	@Min(value = 1)
-	private int rentCityId;
+	private int toCityId;
 
-	@Min(value = 1)
-	private int returnCityId;
-
-	private List<Integer> additionalServiceId;
+	private List<Integer> additionalId;
 
 }

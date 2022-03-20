@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateInvoiceRequest {
 
-	private int userId;
+	private int customerId;
 
 	private LocalDate billingDate;
 
-	private int rentalId;
+	private int rentId;
 }

@@ -12,5 +12,5 @@ public interface AdditionalServiceDao extends JpaRepository<AdditionalService, I
 
 	List<AdditionalService> getAllByRental(int rentId);
 
-	boolean existsByName(String name);
+	boolean existsByAdditionalServiceName(String name);
 }
