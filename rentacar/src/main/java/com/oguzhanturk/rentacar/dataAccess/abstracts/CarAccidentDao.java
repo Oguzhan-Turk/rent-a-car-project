@@ -10,7 +10,5 @@ import com.oguzhanturk.rentacar.entities.concretes.CarAccident;
 @Repository
 public interface CarAccidentDao extends JpaRepository<CarAccident, Integer> {
 	
-	CarAccident getCarAccidentById(int carAccidentId);
-
 	List<CarAccident> getAllByCarCarId(int carId);
 }
