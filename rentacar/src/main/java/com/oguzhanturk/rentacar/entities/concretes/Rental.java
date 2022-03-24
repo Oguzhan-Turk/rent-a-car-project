@@ -17,8 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.oguzhanturk.rentacar.entities.abstracts.Customer;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -75,7 +73,7 @@ public class Rental {
 	@OneToOne(mappedBy = "rental", cascade = CascadeType.ALL)
 	private Invoice invoice;
 
-	@OneToMany(mappedBy = "rental", fetch = FetchType.LAZY)
-	private List<Payment> payments;
+//	@OneToMany(mappedBy = "rental", fetch = FetchType.LAZY)
+//	private List<Payment> payments;
 
 }

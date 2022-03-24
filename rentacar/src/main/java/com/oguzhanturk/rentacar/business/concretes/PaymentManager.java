@@ -31,14 +31,13 @@ public class PaymentManager implements PaymentService {
 	PaymentDao paymentDao;
 
 	@Autowired
-	public PaymentManager(@Lazy PosService posService, ModelMapperService modelMapperService, PaymentDao paymentDao) {
+	public PaymentManager(PosService posService, ModelMapperService modelMapperService, PaymentDao paymentDao) {
 		this.posService = posService;
 		this.modelMapperService = modelMapperService;
 		this.paymentDao = paymentDao;
 	}
 
 	@Override
-	@Transactional
 	public Result add(CreatePaymentRequest createPaymentRequest) {
 		toSendPosService(createPaymentRequest);
 
@@ -68,7 +67,7 @@ public class PaymentManager implements PaymentService {
 
 		return new SuccessDataResult<List<ListPaymentDto>>(response);
 	}
-	
+
 	private void toSendPosService(CreatePaymentRequest createPaymentRequest) {
 		posService.payment(createPaymentRequest);
 	}

@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ListPaymentDto {
 	
+	private int paymentId;
+	
 	private String bankName;
 	
 	private String cardNumber;

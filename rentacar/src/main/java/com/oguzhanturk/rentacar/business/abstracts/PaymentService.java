@@ -10,6 +10,7 @@ import com.oguzhanturk.rentacar.core.utilities.results.DataResult;
 import com.oguzhanturk.rentacar.core.utilities.results.Result;
 
 public interface PaymentService {
+
 	public Result add(CreatePaymentRequest createPaymentRequest);
 
 	Result delete(DeletePaymentRequest deletePaymentRequest) throws BusinessException;

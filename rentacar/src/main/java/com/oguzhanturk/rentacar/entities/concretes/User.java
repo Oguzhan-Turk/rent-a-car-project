@@ -1,4 +1,4 @@
-package com.oguzhanturk.rentacar.entities.abstracts;
+package com.oguzhanturk.rentacar.entities.concretes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

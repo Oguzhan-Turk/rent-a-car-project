@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ListInvoiceDto {
 
-	private int invoiceNo;
+	private int invoiceId;
 
 	private LocalDate billingDate;
 

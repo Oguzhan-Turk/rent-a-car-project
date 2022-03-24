@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateInvoiceRequest {
 
-	private int invoiceNo;
+	private int invoiceId;
 
 	private int customerId;
 

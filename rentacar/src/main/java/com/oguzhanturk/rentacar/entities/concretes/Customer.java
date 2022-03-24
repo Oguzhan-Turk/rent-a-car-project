@@ -1,4 +1,4 @@
-package com.oguzhanturk.rentacar.entities.abstracts;
+package com.oguzhanturk.rentacar.entities.concretes;
 
 import java.util.List;
 
@@ -7,9 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-import com.oguzhanturk.rentacar.entities.concretes.Invoice;
-import com.oguzhanturk.rentacar.entities.concretes.Rental;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

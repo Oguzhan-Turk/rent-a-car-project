@@ -16,8 +16,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import com.oguzhanturk.rentacar.entities.abstracts.Customer;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,8 +28,8 @@ import lombok.NoArgsConstructor;
 public class Invoice {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "invoice_no")
-	private int invoiceNo;
+	@Column(name = "invoice_id")
+	private int invoiceId;
 
 	@Column(name = "billing_date")
 	private LocalDate billingDate;

@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @RestController
 @RequestMapping("/api/carAccidents")
 public class CarAccidentsController {
-	private CarAccidentService carAccidentService;
+	private final CarAccidentService carAccidentService;
 
 	public CarAccidentsController(CarAccidentService carAccidentService) {
 		this.carAccidentService = carAccidentService;

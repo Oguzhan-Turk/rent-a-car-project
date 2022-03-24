@@ -10,18 +10,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentDto {
+
+	private int paymentId;
+
 	private String bankName;
-	
+
 	private String cardNumber;
-	
+
 	private String cardCvv;
-	
+
 	private String cardOwnerName;
-	
+
 	private LocalDate cardExpirationDate;
-	
+
 	private int rentalRentId;
-	
+
 	private int invoiceInvoiceNo;
 
 }

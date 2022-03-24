@@ -53,8 +53,6 @@ public class InvoiceManager implements InvoiceService {
 	public Result add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException {
 		Invoice invoice = modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 		RentalDto rentalDto = rentalService.getById(createInvoiceRequest.getRentId()).getData();
-		
-		
 
 //		invoice.setTotalRentDay(calculateTotalRentDate(invoice.getRental().getRentId()));
 //		invoice.setTotalPrice(calculateTotalPrice(invoice.getRental().getRentId()));
@@ -67,7 +65,7 @@ public class InvoiceManager implements InvoiceService {
 	public DataResult<InvoiceDto> getById(int id) throws BusinessException {
 		checkIfExistsById(id);
 		Invoice result = invoiceDao.getById(id);
-		
+
 		InvoiceDto response = modelMapperService.forDto().map(result, InvoiceDto.class);
 
 		return new SuccessDataResult<InvoiceDto>(response);
@@ -75,8 +73,8 @@ public class InvoiceManager implements InvoiceService {
 
 	@Override
 	public Result update(UpdateInvoiceRequest updateInvoiceRequest) throws BusinessException {
-		checkIfExistsById(updateInvoiceRequest.getInvoiceNo());
-		
+		checkIfExistsById(updateInvoiceRequest.getInvoiceId());
+
 		Invoice invoice = modelMapperService.forRequest().map(updateInvoiceRequest, Invoice.class);
 //		invoice.setInvoiceNo(updateInvoiceRequest.getInvoiceNo());
 
@@ -86,8 +84,8 @@ public class InvoiceManager implements InvoiceService {
 
 	@Override
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) throws BusinessException {
-		checkIfExistsById(deleteInvoiceRequest.getInvoiceNo());
-		invoiceDao.deleteById(deleteInvoiceRequest.getInvoiceNo());
+		checkIfExistsById(deleteInvoiceRequest.getInvoiceId());
+		invoiceDao.deleteById(deleteInvoiceRequest.getInvoiceId());
 		return new SuccessResult("Invoice.Delete");
 	}
 
