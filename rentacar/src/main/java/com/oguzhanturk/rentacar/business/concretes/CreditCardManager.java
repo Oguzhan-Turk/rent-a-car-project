@@ -37,7 +37,7 @@ public class CreditCardManager implements CreditCardService {
 				.map(creditCard -> this.modelMapperService.forDto().map(creditCard, ListCreditCardDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCreditCardDto>>(response);
+		return new SuccessDataResult<List<ListCreditCardDto>>(response, Messages.CREDIT_CARD_LIST);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class CreditCardManager implements CreditCardService {
 		var result = this.creditCardDao.getById(id);
 		CreditCardDto response = this.modelMapperService.forDto().map(result, CreditCardDto.class);
 
-		return new SuccessDataResult<CreditCardDto>(response);
+		return new SuccessDataResult<CreditCardDto>(response, Messages.CREDIT_CARD_FOUND);
 	}
 
 	@Override

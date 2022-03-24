@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.CarAccidentService;
 import com.oguzhanturk.rentacar.business.abstracts.CarService;
+import com.oguzhanturk.rentacar.business.constants.Messages;
 import com.oguzhanturk.rentacar.business.dtos.carAccident.CarAccidentDto;
 import com.oguzhanturk.rentacar.business.dtos.carAccident.ListCarAccidentDto;
 import com.oguzhanturk.rentacar.business.request.carAccident.CreateCarAccidentRequest;
@@ -45,7 +46,7 @@ public class CarAccidentManager implements CarAccidentService {
 				.map(carAccident -> modelMapperService.forDto().map(carAccident, ListCarAccidentDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCarAccidentDto>>(response, "CarAccident records are listed.");
+		return new SuccessDataResult<List<ListCarAccidentDto>>(response, Messages.ACCIDENT_LIST);
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class CarAccidentManager implements CarAccidentService {
 
 		CarAccident carAccident = carAccidentDao.getById(id);
 		CarAccidentDto response = modelMapperService.forDto().map(carAccident, CarAccidentDto.class);
-		return new SuccessDataResult<CarAccidentDto>(response);
+		return new SuccessDataResult<CarAccidentDto>(response, Messages.ACCIDENT_FOUND);
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class CarAccidentManager implements CarAccidentService {
 
 		carAccidentDao.save(carAccident);
 
-		return new SuccessResult("CarAccident.Added");
+		return new SuccessResult(Messages.ACCIDENT_ADD);
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public class CarAccidentManager implements CarAccidentService {
 
 		carAccidentDao.save(carAccident);
 
-		return new SuccessResult("carAccident.Updated");
+		return new SuccessResult(Messages.ACCIDENT_UPDATE);
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public class CarAccidentManager implements CarAccidentService {
 
 		carAccidentDao.deleteById(deleteCarAccidentRequest.getId());
 
-		return new SuccessResult("carAccident.Deleted");
+		return new SuccessResult(Messages.ACCIDENT_UPDATE);
 	}
 
 	@Override
@@ -102,19 +103,19 @@ public class CarAccidentManager implements CarAccidentService {
 				.map(carAccident -> this.modelMapperService.forDto().map(carAccident, ListCarAccidentDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCarAccidentDto>>(response);
+		return new SuccessDataResult<List<ListCarAccidentDto>>(response, Messages.ACCIDENT_LIST);
 	}
 
 	private void checkIfCarAccidentExists(int carAccidentId) throws BusinessException {
 
 		if (!carAccidentDao.existsById(carAccidentId)) {
-			throw new BusinessException("CarAccident does not exist for id : " + carAccidentId);
+			throw new BusinessException(Messages.ACCIDENT_NOT_FOUND);
 		}
 	}
 
 	private void checkIfCarExistsById(int carId) throws BusinessException {
 		if (!carService.isCarExistsById(carId)) {
-			throw new BusinessException("Car does not exist for id : " + carId);
+			throw new BusinessException(Messages.CAR_NOT_FOUND);
 		}
 	}
 }

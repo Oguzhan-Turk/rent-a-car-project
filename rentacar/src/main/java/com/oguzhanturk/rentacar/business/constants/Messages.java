@@ -19,6 +19,8 @@ public class Messages {
 	public static final String GET_CAR_BY_BRAND_ID = "get.car.by.brand.id";
 	public static final String GET_CAR_BY_COLOR_ID = "get.car.by.color.id";
 	public static final String GET_CAR_BY_CITY_ID = "get.car.by.city.id";
+	public static final String CAR_ALREADY_MAINTENANCED = "car.already.maintenanced";
+	public static final String CAR_ALREADY_RENTED = "car.already.rented";
 
 	public static final String CITY_ADD = "city.added";
 	public static final String CITY_UPDATE = "city.updated";
@@ -42,7 +44,7 @@ public class Messages {
 	public static final String CORPORATE_CUSTOMER_UPDATE = "corporate.customer.updated";
 	public static final String CORPORATE_CUSTOMER_DELETE = "corporate.customer.deleted";
 	public static final String CORPORATE_CUSTOMER_LIST = "corporate.customers.listed";
-	public static final String CORPORATE_CUSTOMER_GET = "corporate.customer.found";
+	public static final String CORPORATE_CUSTOMER_FOUND = "corporate.customer.found";
 	public static final String CORPORATE_CUSTOMER_NOT_FOUND = "customer.not.found";
 	public static final String CORPORATE_CUSTOMER_IS_ALREADY_EXISTS = "corporate.customer.exists";
 	public static final String CORPORATE_CUSTOMER_TAX_NUMBER_EXISTS = "corporate.customers.tax.number.already.exists";
@@ -57,6 +59,13 @@ public class Messages {
 	public static final String RENTAL_FOUND = "rental.found";
 	public static final String RENTAL_NOT_FOUND = "rental.not.found";
 
+	public static final String CUSTOMER_ADD = "customer.added";
+	public static final String CUSTOMER_UPDATE = "customer.updated";
+	public static final String CUSTOMER_DELETE = "customer.deleted";
+	public static final String CUSTOMER_LIST = "customers.listed";
+	public static final String CUSTOMER_FOUND = "customer.found";
+	public static final String CUSTOMER_NOT_FOUND = "customer.not.found";
+
 	public static final String CREDIT_CARD_ADD = "credit.card.added";
 	public static final String CREDIT_CARD_UPDATE = "credit.card.updated";
 	public static final String CREDIT_CAR_DELETE = "credit.card.deleted";
@@ -66,7 +75,7 @@ public class Messages {
 	public static final String CREDIT_CARD_CVC_ERROR = "credit.card.cvv.error";
 	public static final String CREDIT_CARD_SAVE = "credit.card.registered";
 	public static final String CREDIT_CARD_NOTSAVE = "credit.card.not.save";
-	public static final String CREDIT_CARD_GET = "credit.card.found";
+	public static final String CREDIT_CARD_FOUND = "credit.card.found";
 	public static final String CREDIT_CARD_ALREADY_EXISTS = "credit.card.exists";
 
 	public static final String PAYMENT_ADD = "payment.add";
@@ -76,7 +85,7 @@ public class Messages {
 	public static final String PAYMENT_CARD_SAVE = "credit.card.saved";
 	public static final String PAYMENT_CARD_NOT_SAVE = "payment.card.not.saved";
 	public static final String PAYMENT_CARD_FAIL = "payment.card.fail";
-	public static final String PAYMENT_GET = "payment.found";
+	public static final String PAYMENT_FOUND = "payment.found";
 	public static final String PAYMENT_NOT_FOUND = "payment.not.found";
 
 	public static final String CAR_MAINTENANCE_ADD = "car.maintenance.added";
@@ -84,6 +93,7 @@ public class Messages {
 	public static final String CAR_MAINTENANCE_DELETE = "car.maintenance.deleted";
 	public static final String CAR_MAINTENANCE_LIST = "car.maintenances.listed";
 	public static final String CAR_MAINTENANCE_RENTAL_ERROR = "car.maintenance.rental.error";
+	public static final String CAR_MAINTENANCE_FOUND = "car.maintenance.found";
 	public static final String CAR_MAINTENANCE_NOT_FOUND = "car.maintenance.not.found";
 	public static final String CAR_MAINTENANCE_ALREADY_EXISTS = "car.maintenance.exists";
 
@@ -91,7 +101,7 @@ public class Messages {
 	public static final String INDIVIDUAL_CUSTOMER_UPDATE = "individual.customer.updated";
 	public static final String INDIVIDUAL_CUSTOMER_DELETE = "individual.customer.deleted";
 	public static final String INDIVIDUAL_CUSTOMER_LIST = "individual.customers.listed";
-	public static final String INDIVIDUAL_CUSTOMER_GET = "individual.customer.found";
+	public static final String INDIVIDUAL_CUSTOMER_FOUND = "individual.customer.found";
 	public static final String INDIVIDUAL_CUSTOMER_NOT_FOUND = "individual.customer.not.found";
 	public static final String INDIVIDUAL_CUSTOMER_IS_ALREADY_EXISTS = "individual.customer.exists";
 	public static final String INDIVIDUAL_CUSTOMER_TAX_NUMBER_EXISTS = "individual.customers.tax.number.already.exists";
@@ -121,6 +131,7 @@ public class Messages {
 	public static final String ADDITIONAL_SERVICE_UPDATE = "additional.service.updated";
 	public static final String ADDITIONAL_SERVICE_DELETE = "additional.service.deleted";
 	public static final String ADDITIONAL_SERVICE_LIST = "additional.services.listed";
+	public static final String ADDITIONAL_SERVICE_GET = "additional.service.found";
 	public static final String ADDITIONAL_SERVICE_NOT_FOUND = "additional.service.not.found";
 
 }

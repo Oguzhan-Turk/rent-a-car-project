@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.IndividualCustomerService;
+import com.oguzhanturk.rentacar.business.constants.Messages;
 import com.oguzhanturk.rentacar.business.dtos.individualCustomer.IndividualCustomerDto;
 import com.oguzhanturk.rentacar.business.dtos.individualCustomer.ListIndividualCustomerDto;
 import com.oguzhanturk.rentacar.business.request.individualCustomer.CreateIndividualCustomerRequest;
@@ -44,7 +45,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		IndividualCustomer individualCustomer = individualCustomerDao.getById(id);
 		IndividualCustomerDto individualCustomerDto = modelMapperService.forDto().map(individualCustomer,
 				IndividualCustomerDto.class);
-		return new SuccessDataResult<IndividualCustomerDto>(individualCustomerDto);
+		return new SuccessDataResult<IndividualCustomerDto>(individualCustomerDto, Messages.INDIVIDUAL_CUSTOMER_FOUND);
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 				IndividualCustomer.class);
 		individualCustomerDao.save(individualCustomer);
 
-		return new SuccessDataResult<CreateIndividualCustomerRequest>();
+		return new SuccessResult(Messages.INDIVIDUAL_CUSTOMER_ADD);
 	}
 
 	@Override
@@ -63,13 +64,13 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 				IndividualCustomer.class);
 		individualCustomerDao.save(individualCustomer);
 
-		return new SuccessDataResult<UpdateIndividualCustomerRequest>();
+		return new SuccessResult(Messages.INDIVIDUAL_CUSTOMER_UPDATE);
 	}
 
 	@Override
 	public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) throws BusinessException {
 		individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getId());
-		return new SuccessResult();
+		return new SuccessResult(Messages.INDIVIDUAL_CUSTOMER_DELETE);
 	}
 
 	@Override
@@ -81,7 +82,8 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 						ListIndividualCustomerDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos);
+		return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos,
+				Messages.INDIVIDUAL_CUSTOMER_LIST);
 	}
 
 	@Override
@@ -93,7 +95,8 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 						ListIndividualCustomerDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos);
+		return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos,
+				Messages.INDIVIDUAL_CUSTOMER_LIST);
 	}
 
 	@Override
@@ -104,7 +107,8 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 						ListIndividualCustomerDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos);
+		return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos,
+				Messages.INDIVIDUAL_CUSTOMER_LIST);
 	}
 
 }

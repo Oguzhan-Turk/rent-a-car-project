@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.InvoiceService;
 import com.oguzhanturk.rentacar.business.abstracts.RentalService;
+import com.oguzhanturk.rentacar.business.constants.Messages;
 import com.oguzhanturk.rentacar.business.dtos.invoice.InvoiceDto;
 import com.oguzhanturk.rentacar.business.dtos.invoice.ListInvoiceDto;
 import com.oguzhanturk.rentacar.business.dtos.rental.RentalDto;
@@ -46,7 +47,7 @@ public class InvoiceManager implements InvoiceService {
 				.map(invoice -> modelMapperService.forDto().map(invoice, ListInvoiceDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListInvoiceDto>>(response);
+		return new SuccessDataResult<List<ListInvoiceDto>>(response, Messages.INVOICE_LIST);
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class InvoiceManager implements InvoiceService {
 //		invoice.setTotalPrice(calculateTotalPrice(invoice.getRental().getRentId()));
 
 		invoiceDao.save(invoice);
-		return new SuccessResult("Invoice.Add");
+		return new SuccessResult(Messages.INVOICE_ADD);
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class InvoiceManager implements InvoiceService {
 
 		InvoiceDto response = modelMapperService.forDto().map(result, InvoiceDto.class);
 
-		return new SuccessDataResult<InvoiceDto>(response);
+		return new SuccessDataResult<InvoiceDto>(response, Messages.INVOICE_FOUND);
 	}
 
 	@Override
@@ -79,14 +80,14 @@ public class InvoiceManager implements InvoiceService {
 //		invoice.setInvoiceNo(updateInvoiceRequest.getInvoiceNo());
 
 		invoiceDao.save(invoice);
-		return new SuccessResult("Invoice.Update");
+		return new SuccessResult(Messages.INVOICE_UPDATE);
 	}
 
 	@Override
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) throws BusinessException {
 		checkIfExistsById(deleteInvoiceRequest.getInvoiceId());
 		invoiceDao.deleteById(deleteInvoiceRequest.getInvoiceId());
-		return new SuccessResult("Invoice.Delete");
+		return new SuccessResult(Messages.INVOICE_DELETE);
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class InvoiceManager implements InvoiceService {
 		List<ListInvoiceDto> response = result.stream()
 				.map(invoice -> modelMapperService.forDto().map(invoice, ListInvoiceDto.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<ListInvoiceDto>>(response);
+		return new SuccessDataResult<List<ListInvoiceDto>>(response, Messages.INVOICE_LIST);
 	}
 
 	private BigDecimal calculateTotalPrice(int rentalId) throws BusinessException {
@@ -116,7 +117,7 @@ public class InvoiceManager implements InvoiceService {
 
 	private void checkIfExistsById(int invoiceNo) throws BusinessException {
 		if (!invoiceDao.existsById(invoiceNo)) {
-			throw new BusinessException("The invoice with id : " + invoiceNo + " was not found!");
+			throw new BusinessException(Messages.INVOICE_NOT_FOUND);
 		}
 	}
 

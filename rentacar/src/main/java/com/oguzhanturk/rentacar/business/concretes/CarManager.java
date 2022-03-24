@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.CarService;
+import com.oguzhanturk.rentacar.business.constants.Messages;
 import com.oguzhanturk.rentacar.business.dtos.car.CarDto;
 import com.oguzhanturk.rentacar.business.dtos.car.ListCarDto;
 import com.oguzhanturk.rentacar.business.request.car.CreateCarRequest;
@@ -43,7 +44,7 @@ public class CarManager implements CarService {
 		List<Car> result = carDao.findAll();
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<ListCarDto>>(response);
+		return new SuccessDataResult<List<ListCarDto>>(response, Messages.CAR_LIST);
 	}
 
 	@Override
@@ -51,21 +52,21 @@ public class CarManager implements CarService {
 		checkIfCarExistsById(id);
 		Car car = carDao.getById(id);
 		CarDto response = modelMapperService.forDto().map(car, CarDto.class);
-		return new SuccessDataResult<CarDto>(response);
+		return new SuccessDataResult<CarDto>(response, Messages.CAR_FOUND);
 	}
 
 	@Override
 	public Result add(CreateCarRequest createCarRequest) {
 		Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
 		carDao.save(car);
-		return new SuccessResult();
+		return new SuccessResult(Messages.CAR_ADD);
 	}
 
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) throws BusinessException {
 		checkIfCarExistsById(deleteCarRequest.getCarId());
 		carDao.deleteById(deleteCarRequest.getCarId());
-		return new SuccessResult();
+		return new SuccessResult(Messages.CAR_DELETE);
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class CarManager implements CarService {
 		checkIfCarExistsById(updateCarRequest.getCarId());
 		Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		carDao.save(car);
-		return new SuccessResult();
+		return new SuccessResult(Messages.CAR_UPDATE);
 	}
 
 	@Override
@@ -83,7 +84,7 @@ public class CarManager implements CarService {
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCarDto>>(response);
+		return new SuccessDataResult<List<ListCarDto>>(response, Messages.CAR_LIST);
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class CarManager implements CarService {
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCarDto>>(response);
+		return new SuccessDataResult<List<ListCarDto>>(response, Messages.CAR_LIST);
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public class CarManager implements CarService {
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCarDto>>(response);
+		return new SuccessDataResult<List<ListCarDto>>(response, Messages.CAR_LIST);
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class CarManager implements CarService {
 
 	private void checkIfCarExistsById(int carId) throws BusinessException {
 		if (!isCarExistsById(carId)) {
-			throw new BusinessException("The car with id : " + carId + " was not found!");
+			throw new BusinessException(Messages.CAR_NOT_FOUND);
 		}
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.CityService;
+import com.oguzhanturk.rentacar.business.constants.Messages;
 import com.oguzhanturk.rentacar.business.dtos.city.CityDto;
 import com.oguzhanturk.rentacar.business.dtos.city.ListCityDto;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
@@ -36,7 +37,7 @@ public class CityManager implements CityService {
 	public DataResult<CityDto> getById(int cityId) throws BusinessException {
 		City city = cityDao.getById(cityId);
 		CityDto response = modelMapperService.forDto().map(city, CityDto.class);
-		return new SuccessDataResult<CityDto>(response);
+		return new SuccessDataResult<CityDto>(response, Messages.CITY_FOUND);
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class CityManager implements CityService {
 				.map(city -> this.modelMapperService.forDto().map(city, ListCityDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCityDto>>(listCityDtos);
+		return new SuccessDataResult<List<ListCityDto>>(listCityDtos, Messages.CITY_LIST);
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class CityManager implements CityService {
 				.map(city -> this.modelMapperService.forDto().map(city, ListCityDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCityDto>>(response);
+		return new SuccessDataResult<List<ListCityDto>>(response, Messages.CITY_LIST);
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class CityManager implements CityService {
 				.map(city -> this.modelMapperService.forDto().map(city, ListCityDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCityDto>>(response);
+		return new SuccessDataResult<List<ListCityDto>>(response, Messages.CITY_LIST);
 	}
 
 }

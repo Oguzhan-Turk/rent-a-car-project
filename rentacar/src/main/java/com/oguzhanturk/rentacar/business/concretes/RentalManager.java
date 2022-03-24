@@ -14,6 +14,7 @@ import com.oguzhanturk.rentacar.business.abstracts.CarMaintenanceService;
 import com.oguzhanturk.rentacar.business.abstracts.CarService;
 import com.oguzhanturk.rentacar.business.abstracts.CustomerService;
 import com.oguzhanturk.rentacar.business.abstracts.RentalService;
+import com.oguzhanturk.rentacar.business.constants.Messages;
 import com.oguzhanturk.rentacar.business.dtos.rental.ListRentalDto;
 import com.oguzhanturk.rentacar.business.dtos.rental.RentalDto;
 import com.oguzhanturk.rentacar.business.request.rental.CreateRentalRequest;
@@ -54,7 +55,7 @@ public class RentalManager implements RentalService {
 		List<ListRentalDto> response = result.stream()
 				.map(rental -> modelMapperService.forDto().map(rental, ListRentalDto.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<ListRentalDto>>(response);
+		return new SuccessDataResult<List<ListRentalDto>>(response, Messages.RENTAL_LIST);
 	}
 
 	@Override
@@ -62,7 +63,7 @@ public class RentalManager implements RentalService {
 		checkIfRentalExistsById(id);
 		Rental rental = rentalDao.getById(id);
 		RentalDto response = modelMapperService.forDto().map(rental, RentalDto.class);
-		return new SuccessDataResult<RentalDto>(response);
+		return new SuccessDataResult<RentalDto>(response, Messages.RENTAL_FOUND);
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public class RentalManager implements RentalService {
 //		System.out.println(rental.getCustomer());
 		rentalDao.save(rental);
 
-		return new SuccessResult();
+		return new SuccessResult(Messages.RENTAL_ADD);
 	}
 
 	@Override
@@ -96,14 +97,14 @@ public class RentalManager implements RentalService {
 		rental.setRentalTotalPrice(calculateRentalTotalPrice(rental));
 
 		rentalDao.save(rental);
-		return new SuccessResult();
+		return new SuccessResult(Messages.RENTAL_UPDATE);
 	}
 
 	@Override
 	public Result delete(DeleteRentalRequest deleteRentalRequest) throws BusinessException {
 		checkIfRentalExistsById(deleteRentalRequest.getRentId());
 		rentalDao.deleteById(deleteRentalRequest.getRentId());
-		return new SuccessResult();
+		return new SuccessResult(Messages.RENTAL_DELETE);
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class RentalManager implements RentalService {
 		List<ListRentalDto> response = result.stream()
 				.map(rental -> modelMapperService.forDto().map(rental, ListRentalDto.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<ListRentalDto>>(response);
+		return new SuccessDataResult<List<ListRentalDto>>(response, Messages.RENTAL_LIST);
 	}
 
 	@Override
@@ -129,16 +130,16 @@ public class RentalManager implements RentalService {
 	private void checkIfAvailableForRent(Rental rental) throws BusinessException {
 
 		if (!customerService.isExistById(rental.getCustomer().getCustomerId())) {
-			throw new BusinessException("The customer was not found!");
+			throw new BusinessException(Messages.CUSTOMER_NOT_FOUND);
 		}
 		if (!carService.isCarExistsById(rental.getCar().getCarId())) {
-			throw new BusinessException("The car was not found!");
+			throw new BusinessException(Messages.CAR_NOT_FOUND);
 		}
 		if (isCarAlreadyRented(rental.getCar().getCarId())) {
-			throw new BusinessException("The car is already rented");
+			throw new BusinessException(Messages.CAR_ALREADY_RENTED);
 		}
 		if (carMaintenanceService.isCarInMaintenanceForRent(rental.getCar().getCarId(), rental.getRentDate())) {
-			throw new BusinessException("The car is under maintenance");
+			throw new BusinessException(Messages.CAR_ALREADY_MAINTENANCED);
 		}
 
 	}
@@ -146,7 +147,7 @@ public class RentalManager implements RentalService {
 	private void checkIfAvailableForReturn(int carId) throws BusinessException {
 
 		if (!carService.isCarExistsById(carId)) {
-			throw new BusinessException("The car with id : " + carId + " was not found!");
+			throw new BusinessException(Messages.CAR_NOT_FOUND);
 		}
 	}
 
@@ -195,7 +196,7 @@ public class RentalManager implements RentalService {
 
 	private void checkIfRentalExistsById(int rentalId) throws BusinessException {
 		if (rentalDao.existsById(rentalId)) {
-			new BusinessException("The rental was not found!");
+			new BusinessException(Messages.RENTAL_NOT_FOUND);
 		}
 	}
 

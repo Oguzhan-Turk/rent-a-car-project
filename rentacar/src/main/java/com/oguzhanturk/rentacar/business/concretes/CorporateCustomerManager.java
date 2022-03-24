@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.oguzhanturk.rentacar.business.abstracts.CorporateCustomerService;
+import com.oguzhanturk.rentacar.business.constants.Messages;
 import com.oguzhanturk.rentacar.business.dtos.corporateCustomer.CorporateCustomerDto;
 import com.oguzhanturk.rentacar.business.dtos.corporateCustomer.ListCorporateCustomerDto;
 import com.oguzhanturk.rentacar.business.request.corporateCustomer.CreateCorporateCustomerRequest;
@@ -43,7 +44,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		CorporateCustomer corporateCustomer = corporateCustomerDao.getById(id);
 		CorporateCustomerDto corporateCustomerDto = modelMapperService.forDto().map(corporateCustomer,
 				CorporateCustomerDto.class);
-		return new SuccessDataResult<CorporateCustomerDto>(corporateCustomerDto);
+		return new SuccessDataResult<CorporateCustomerDto>(corporateCustomerDto, Messages.CORPORATE_CUSTOMER_FOUND);
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 				CorporateCustomer.class);
 		corporateCustomerDao.save(corporateCustomer);
 
-		return new SuccessDataResult<CreateCorporateCustomerRequest>();
+		return new SuccessResult(Messages.CORPORATE_CUSTOMER_ADD);
 	}
 
 	@Override
@@ -63,13 +64,13 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 				CorporateCustomer.class);
 		corporateCustomerDao.save(corporateCustomer);
 
-		return new SuccessDataResult<UpdateCorporateCustomerRequest>();
+		return new SuccessResult(Messages.CORPORATE_CUSTOMER_UPDATE);
 	}
 
 	@Override
 	public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) throws BusinessException {
 		corporateCustomerDao.deleteById(deleteCorporateCustomerRequest.getId());
-		return new SuccessResult();
+		return new SuccessResult(Messages.CORPORATE_CUSTOMER_DELETE);
 	}
 
 	@Override
@@ -81,7 +82,8 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 				corporateCustomer -> modelMapperService.forDto().map(corporateCustomer, ListCorporateCustomerDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCorporateCustomerDto>>(listCorporateCustomerDtos);
+		return new SuccessDataResult<List<ListCorporateCustomerDto>>(listCorporateCustomerDtos,
+				Messages.CORPORATE_CUSTOMER_LIST);
 	}
 
 	@Override
@@ -94,7 +96,8 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 						ListCorporateCustomerDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCorporateCustomerDto>>(listCorporateCustomerDtos);
+		return new SuccessDataResult<List<ListCorporateCustomerDto>>(listCorporateCustomerDtos,
+				Messages.CORPORATE_CUSTOMER_LIST);
 	}
 
 	@Override
@@ -105,7 +108,8 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 				corporateCustomer -> modelMapperService.forDto().map(corporateCustomer, ListCorporateCustomerDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListCorporateCustomerDto>>(listCorporateCustomerDtos);
+		return new SuccessDataResult<List<ListCorporateCustomerDto>>(listCorporateCustomerDtos,
+				Messages.CORPORATE_CUSTOMER_LIST);
 	}
 
 }

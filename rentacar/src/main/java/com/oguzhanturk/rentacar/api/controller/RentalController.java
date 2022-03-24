@@ -56,7 +56,7 @@ public class RentalController {
 	}
 
 	@PutMapping("/update")
-	public Result delete(@RequestBody @Valid UpdateRentalRequest updateRentalRequest) throws BusinessException {
+	public Result update(@RequestBody @Valid UpdateRentalRequest updateRentalRequest) throws BusinessException {
 		return rentalService.update(updateRentalRequest);
 	}
 

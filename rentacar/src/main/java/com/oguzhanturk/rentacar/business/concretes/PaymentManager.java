@@ -72,7 +72,7 @@ public class PaymentManager implements PaymentService {
 				.map(payment -> this.modelMapperService.forDto().map(payment, ListPaymentDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListPaymentDto>>(response);
+		return new SuccessDataResult<List<ListPaymentDto>>(response, Messages.PAYMENT_LIST);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class PaymentManager implements PaymentService {
 		Payment result = this.paymentDao.getById(paymentId);
 		PaymentDto response = this.modelMapperService.forDto().map(result, PaymentDto.class);
 
-		return new SuccessDataResult<PaymentDto>(response);
+		return new SuccessDataResult<PaymentDto>(response, Messages.PAYMENT_FOUND);
 	}
 
 	private void toSendPosService(CreatePaymentRequest createPaymentRequest) {
