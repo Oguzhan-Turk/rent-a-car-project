@@ -32,7 +32,7 @@ public class PaymentsController {
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody @Valid CreatePaymentRequest createPaymentRequest) {
+	public Result add(@RequestBody @Valid CreatePaymentRequest createPaymentRequest) throws BusinessException {
 		return paymentService.add(createPaymentRequest);
 	}
 

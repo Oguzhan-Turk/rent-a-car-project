@@ -76,6 +76,8 @@ public class Messages {
 	public static final String PAYMENT_CARD_SAVE = "credit.card.saved";
 	public static final String PAYMENT_CARD_NOT_SAVE = "payment.card.not.saved";
 	public static final String PAYMENT_CARD_FAIL = "payment.card.fail";
+	public static final String PAYMENT_GET = "payment.found";
+	public static final String PAYMENT_NOT_FOUND = "payment.not.found";
 
 	public static final String CAR_MAINTENANCE_ADD = "car.maintenance.added";
 	public static final String CAR_MAINTENANCE_UPDATE = "car.maintenance.updated";

@@ -1,17 +1,18 @@
 package com.oguzhanturk.rentacar.business.concretes;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.oguzhanturk.rentacar.business.abstracts.InvoiceService;
 import com.oguzhanturk.rentacar.business.abstracts.PaymentService;
 import com.oguzhanturk.rentacar.business.abstracts.PosService;
+import com.oguzhanturk.rentacar.business.constants.Messages;
 import com.oguzhanturk.rentacar.business.dtos.payment.ListPaymentDto;
+import com.oguzhanturk.rentacar.business.dtos.payment.PaymentDto;
 import com.oguzhanturk.rentacar.business.request.payment.CreatePaymentRequest;
 import com.oguzhanturk.rentacar.business.request.payment.DeletePaymentRequest;
 import com.oguzhanturk.rentacar.core.utilities.exceptions.BusinessException;
@@ -29,38 +30,44 @@ public class PaymentManager implements PaymentService {
 	PosService posService;
 	ModelMapperService modelMapperService;
 	PaymentDao paymentDao;
+	InvoiceService invoiceService;
 
 	@Autowired
-	public PaymentManager(PosService posService, ModelMapperService modelMapperService, PaymentDao paymentDao) {
+	public PaymentManager(PosService posService, ModelMapperService modelMapperService, PaymentDao paymentDao,
+			InvoiceService invoiceService) {
 		this.posService = posService;
 		this.modelMapperService = modelMapperService;
 		this.paymentDao = paymentDao;
+		this.invoiceService = invoiceService;
 	}
 
 	@Override
-	public Result add(CreatePaymentRequest createPaymentRequest) {
+	public Result add(CreatePaymentRequest createPaymentRequest) throws BusinessException {
 		toSendPosService(createPaymentRequest);
 
-		Payment payment = modelMapperService.forRequest().map(createPaymentRequest, Payment.class);
+		Payment payment = this.modelMapperService.forRequest().map(createPaymentRequest, Payment.class);
 
-		paymentDao.save(payment);
+		checkIfInvoiceExists(createPaymentRequest.getInvoiceId());
 
-		return new SuccessResult();
+		this.paymentDao.save(payment);
+
+		return new SuccessResult(Messages.PAYMENT_ADD);
 
 	}
 
 	@Override
 	public Result delete(DeletePaymentRequest deletePaymentRequest) throws BusinessException {
-
 		checkIfPaymentExist(deletePaymentRequest.getPaymentId());
+
 		paymentDao.deleteById(deletePaymentRequest.getPaymentId());
-		return new SuccessResult();
+
+		return new SuccessResult(Messages.PAYMENT_DELETE);
 	}
 
 	@Override
 	public DataResult<List<ListPaymentDto>> getAll() {
+		var result = this.paymentDao.findAll();
 
-		List<Payment> result = this.paymentDao.findAll();
 		List<ListPaymentDto> response = result.stream()
 				.map(payment -> this.modelMapperService.forDto().map(payment, ListPaymentDto.class))
 				.collect(Collectors.toList());
@@ -68,13 +75,30 @@ public class PaymentManager implements PaymentService {
 		return new SuccessDataResult<List<ListPaymentDto>>(response);
 	}
 
+	@Override
+	public DataResult<PaymentDto> getById(int paymentId) throws BusinessException {
+		checkIfPaymentExist(paymentId);
+
+		Payment result = this.paymentDao.getById(paymentId);
+		PaymentDto response = this.modelMapperService.forDto().map(result, PaymentDto.class);
+
+		return new SuccessDataResult<PaymentDto>(response);
+	}
+
 	private void toSendPosService(CreatePaymentRequest createPaymentRequest) {
 		posService.payment(createPaymentRequest);
 	}
 
+	private void checkIfInvoiceExists(int invoiceId) throws BusinessException {
+
+		if (Objects.isNull(invoiceService.getById(invoiceId))) {
+			throw new BusinessException(Messages.INVOICE_NOT_FOUND);
+		}
+	}
+
 	private void checkIfPaymentExist(int paymentId) throws BusinessException {
-		if (!paymentDao.existsById(paymentId)) {
-			throw new BusinessException("Payment does not exist!");
+		if (Objects.isNull(paymentDao.getById(paymentId))) {
+			throw new BusinessException(Messages.PAYMENT_NOT_FOUND);
 		}
 	}
 

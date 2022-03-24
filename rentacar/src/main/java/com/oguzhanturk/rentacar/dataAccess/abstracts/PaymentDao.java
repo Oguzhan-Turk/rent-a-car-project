@@ -1,14 +1,12 @@
 package com.oguzhanturk.rentacar.dataAccess.abstracts;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.oguzhanturk.rentacar.entities.concretes.Payment;
 
+@Repository
 public interface PaymentDao extends JpaRepository<Payment, Integer> {
 
-	List<Payment> getByCardOwnerName(String cardOwnerName);
-
-	List<Payment> getByCardNumber(String cardNumber);
+	Payment getPaymentByInvoiceInvoiceId(int invoiceNo);
 }
