@@ -45,30 +45,30 @@ public class Rental {
 	@Column(name = "return_kilometer")
 	private double returnKilometer;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "car_id")
 	private Car car;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 
 	@OneToMany(mappedBy = "rental")
 	private List<AdditionalService> additionalServices;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "from_city_id")
 	private City fromCity;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "to_city_id")
 	private City toCity;
 
 	@Column(name = "rental_daily_price")
-	private BigDecimal rentalDailyPrice;
+	private double rentalDailyPrice;
 
 	@Column(name = "rental_total_price")
-	private BigDecimal rentalTotalPrice;
+	private double rentalTotalPrice;
 
 	@OneToOne(mappedBy = "rental", cascade = CascadeType.ALL)
 	private Invoice invoice;

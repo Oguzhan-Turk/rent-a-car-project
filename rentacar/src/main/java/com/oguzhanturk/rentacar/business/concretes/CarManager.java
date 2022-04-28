@@ -78,7 +78,7 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public DataResult<List<ListCarDto>> getByDailyPriceLessThan(BigDecimal maxDailyPrice) {
+	public DataResult<List<ListCarDto>> getByDailyPriceLessThan(double maxDailyPrice) {
 		var result = carDao.getByDailyPriceLessThanEqual(maxDailyPrice);
 
 		List<ListCarDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, ListCarDto.class))

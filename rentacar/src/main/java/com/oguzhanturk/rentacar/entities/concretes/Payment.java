@@ -21,16 +21,16 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Payment {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
-	@OneToOne
-	@JoinColumn(name = "invoice_id")
-	private Invoice invoice;
+    @OneToOne
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
 
-	@ManyToOne
-	@JoinColumn(name = "credit_card_id")
-	private CreditCard creditCard;
+    @ManyToOne
+    @JoinColumn(name = "credit_card_id")
+    private CreditCard creditCard;
 }

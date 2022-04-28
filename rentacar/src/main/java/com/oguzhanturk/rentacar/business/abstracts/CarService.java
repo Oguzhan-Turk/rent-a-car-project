@@ -26,7 +26,7 @@ public interface CarService {
 
 	Result update(UpdateCarRequest updateCarRequest) throws BusinessException;
 
-	DataResult<List<ListCarDto>> getByDailyPriceLessThan(BigDecimal maxDailyPrice);
+	DataResult<List<ListCarDto>> getByDailyPriceLessThan(double maxDailyPrice);
 
 	DataResult<List<ListCarDto>> getAllPaged(int pageNo, int pageSize);
 

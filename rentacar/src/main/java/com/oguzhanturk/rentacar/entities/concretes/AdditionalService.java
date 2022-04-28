@@ -22,21 +22,21 @@ import lombok.NoArgsConstructor;
 @Table(name = "additional_service")
 public class AdditionalService {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "additional_service_id")
-	private int additionalServiceId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "additional_service_id")
+    private int additionalServiceId;
 
-	@Column(name = "additional_service_name")
-	private String additionalServiceName;
+    @Column(name = "additional_service_name")
+    private String additionalServiceName;
 
-	@Column(name = "additional_service_description")
-	private String additionalServiceDescription;
+    @Column(name = "additional_service_description")
+    private String additionalServiceDescription;
 
-	@Column(name = "additional_service_daily_price")
-	private BigDecimal additionalServiceDailyPrice;
+    @Column(name = "additional_service_daily_price")
+    private double additionalServiceDailyPrice;
 
-	@ManyToOne
-	@JoinColumn(name = "rental_id")
-	private Rental rental;
+    @ManyToOne
+    @JoinColumn(name = "rental_id")
+    private Rental rental;
 }

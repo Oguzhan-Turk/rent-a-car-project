@@ -44,7 +44,7 @@ public class Invoice {
 	private long totalRentDay;
 
 	@Column(name = "total_price")
-	private BigDecimal totalPrice;
+	private double totalPrice;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")

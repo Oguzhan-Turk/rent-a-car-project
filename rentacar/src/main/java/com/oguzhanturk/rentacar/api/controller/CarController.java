@@ -63,7 +63,7 @@ public class CarController {
 	}
 
 	@GetMapping("/getByDailyPriceLessThanEqual")
-	public DataResult<List<ListCarDto>> getByDailyPriceLessThanEqual(BigDecimal maxDailyPrice) {
+	public DataResult<List<ListCarDto>> getByDailyPriceLessThanEqual(double maxDailyPrice) {
 		return carService.getByDailyPriceLessThan(maxDailyPrice);
 	}
 

@@ -22,7 +22,7 @@ public class ListInvoiceDto {
 
 	private int totalRentDay;
 
-	private BigDecimal totalPrice;
+	private double totalPrice;
 
 	private int customerId;
 

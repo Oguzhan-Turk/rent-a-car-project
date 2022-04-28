@@ -22,7 +22,7 @@ public class UpdateCarRequest {
 
 	@NotNull(message = "Daily price should not be null")
 	@Positive(message = "Daily price should be positive")
-	private BigDecimal dailyPrice;
+	private double dailyPrice;
 
 	@Min(value = 1900, message = "Model year should not be least 1900 or null")
 	private int modelYear;

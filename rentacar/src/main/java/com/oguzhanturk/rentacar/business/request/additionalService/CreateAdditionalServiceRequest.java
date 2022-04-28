@@ -13,5 +13,5 @@ public class CreateAdditionalServiceRequest {
 
 	private String additionalServiceName;
 	private String additionalServiceDescription;
-	private BigDecimal additionalServiceDailyPrice;
+	private double additionalServiceDailyPrice;
 }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ListCarDto {
 
 	private int carId;
-	private BigDecimal dailyPrice;
+	private double dailyPrice;
 	private int modelYear;
 	private String description;
 	private double kilometer;

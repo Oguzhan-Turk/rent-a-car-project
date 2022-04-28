@@ -29,86 +29,86 @@ import com.oguzhanturk.rentacar.entities.concretes.IndividualCustomer;
 @Service
 public class IndividualCustomerManager implements IndividualCustomerService {
 
-	private IndividualCustomerDao individualCustomerDao;
-	private ModelMapperService modelMapperService;
+    private IndividualCustomerDao individualCustomerDao;
+    private ModelMapperService modelMapperService;
 
-	@Autowired
-	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,
-			ModelMapperService modelMapperService) {
-		this.individualCustomerDao = individualCustomerDao;
-		this.modelMapperService = modelMapperService;
-	}
+    @Autowired
+    public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,
+                                     ModelMapperService modelMapperService) {
+        this.individualCustomerDao = individualCustomerDao;
+        this.modelMapperService = modelMapperService;
+    }
 
-	@Override
-	public DataResult<IndividualCustomerDto> getById(int id) throws BusinessException {
+    @Override
+    public DataResult<IndividualCustomerDto> getById(int id) throws BusinessException {
 
-		IndividualCustomer individualCustomer = individualCustomerDao.getById(id);
-		IndividualCustomerDto individualCustomerDto = modelMapperService.forDto().map(individualCustomer,
-				IndividualCustomerDto.class);
-		return new SuccessDataResult<IndividualCustomerDto>(individualCustomerDto, Messages.INDIVIDUAL_CUSTOMER_FOUND);
-	}
+        IndividualCustomer individualCustomer = individualCustomerDao.getById(id);
+        IndividualCustomerDto individualCustomerDto = modelMapperService.forDto().map(individualCustomer,
+                IndividualCustomerDto.class);
+        return new SuccessDataResult<IndividualCustomerDto>(individualCustomerDto, Messages.INDIVIDUAL_CUSTOMER_FOUND);
+    }
 
-	@Override
-	public Result create(CreateIndividualCustomerRequest createIndividualCustomerRequest) throws BusinessException {
+    @Override
+    public Result create(CreateIndividualCustomerRequest createIndividualCustomerRequest) throws BusinessException {
 
-		IndividualCustomer individualCustomer = modelMapperService.forRequest().map(createIndividualCustomerRequest,
-				IndividualCustomer.class);
-		individualCustomerDao.save(individualCustomer);
+        IndividualCustomer individualCustomer = modelMapperService.forRequest().map(createIndividualCustomerRequest,
+                IndividualCustomer.class);
+        individualCustomerDao.save(individualCustomer);
 
-		return new SuccessResult(Messages.INDIVIDUAL_CUSTOMER_ADD);
-	}
+        return new SuccessResult(Messages.INDIVIDUAL_CUSTOMER_ADD);
+    }
 
-	@Override
-	public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) throws BusinessException {
-		IndividualCustomer individualCustomer = modelMapperService.forRequest().map(updateIndividualCustomerRequest,
-				IndividualCustomer.class);
-		individualCustomerDao.save(individualCustomer);
+    @Override
+    public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) throws BusinessException {
+        IndividualCustomer individualCustomer = modelMapperService.forRequest().map(updateIndividualCustomerRequest,
+                IndividualCustomer.class);
+        individualCustomerDao.save(individualCustomer);
 
-		return new SuccessResult(Messages.INDIVIDUAL_CUSTOMER_UPDATE);
-	}
+        return new SuccessResult(Messages.INDIVIDUAL_CUSTOMER_UPDATE);
+    }
 
-	@Override
-	public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) throws BusinessException {
-		individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getId());
-		return new SuccessResult(Messages.INDIVIDUAL_CUSTOMER_DELETE);
-	}
+    @Override
+    public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) throws BusinessException {
+        individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getId());
+        return new SuccessResult(Messages.INDIVIDUAL_CUSTOMER_DELETE);
+    }
 
-	@Override
-	public DataResult<List<ListIndividualCustomerDto>> getAllSorted(Direction direction) throws BusinessException {
-		Sort sort = Sort.by(direction, "firstname");
-		List<IndividualCustomer> individualCustomers = individualCustomerDao.findAll(sort);
-		List<ListIndividualCustomerDto> listIndividualCustomerDtos = individualCustomers.stream()
-				.map(individualCustomer -> modelMapperService.forDto().map(individualCustomer,
-						ListIndividualCustomerDto.class))
-				.collect(Collectors.toList());
+    @Override
+    public DataResult<List<ListIndividualCustomerDto>> getAllSorted(Direction direction) throws BusinessException {
+        Sort sort = Sort.by(direction, "firstname");
+        List<IndividualCustomer> individualCustomers = individualCustomerDao.findAll(sort);
+        List<ListIndividualCustomerDto> listIndividualCustomerDtos = individualCustomers.stream()
+                .map(individualCustomer -> modelMapperService.forDto().map(individualCustomer,
+                        ListIndividualCustomerDto.class))
+                .collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos,
-				Messages.INDIVIDUAL_CUSTOMER_LIST);
-	}
+        return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos,
+                Messages.INDIVIDUAL_CUSTOMER_LIST);
+    }
 
-	@Override
-	public DataResult<List<ListIndividualCustomerDto>> getAllPaged(int pageNo, int pageSize) throws BusinessException {
-		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-		List<IndividualCustomer> individualCustomers = individualCustomerDao.findAll(pageable).getContent();
-		List<ListIndividualCustomerDto> listIndividualCustomerDtos = individualCustomers.stream()
-				.map(individualCustomer -> modelMapperService.forDto().map(individualCustomer,
-						ListIndividualCustomerDto.class))
-				.collect(Collectors.toList());
+    @Override
+    public DataResult<List<ListIndividualCustomerDto>> getAllPaged(int pageNo, int pageSize) throws BusinessException {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        List<IndividualCustomer> individualCustomers = individualCustomerDao.findAll(pageable).getContent();
+        List<ListIndividualCustomerDto> listIndividualCustomerDtos = individualCustomers.stream()
+                .map(individualCustomer -> modelMapperService.forDto().map(individualCustomer,
+                        ListIndividualCustomerDto.class))
+                .collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos,
-				Messages.INDIVIDUAL_CUSTOMER_LIST);
-	}
+        return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos,
+                Messages.INDIVIDUAL_CUSTOMER_LIST);
+    }
 
-	@Override
-	public DataResult<List<ListIndividualCustomerDto>> listAll() throws BusinessException {
-		List<IndividualCustomer> individualCustomers = individualCustomerDao.findAll();
-		List<ListIndividualCustomerDto> listIndividualCustomerDtos = individualCustomers.stream()
-				.map(individualCustomer -> modelMapperService.forDto().map(individualCustomer,
-						ListIndividualCustomerDto.class))
-				.collect(Collectors.toList());
+    @Override
+    public DataResult<List<ListIndividualCustomerDto>> listAll() throws BusinessException {
+        List<IndividualCustomer> individualCustomers = individualCustomerDao.findAll();
+        List<ListIndividualCustomerDto> listIndividualCustomerDtos = individualCustomers.stream()
+                .map(individualCustomer -> modelMapperService.forDto().map(individualCustomer,
+                        ListIndividualCustomerDto.class))
+                .collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos,
-				Messages.INDIVIDUAL_CUSTOMER_LIST);
-	}
+        return new SuccessDataResult<List<ListIndividualCustomerDto>>(listIndividualCustomerDtos,
+                Messages.INDIVIDUAL_CUSTOMER_LIST);
+    }
 
 }

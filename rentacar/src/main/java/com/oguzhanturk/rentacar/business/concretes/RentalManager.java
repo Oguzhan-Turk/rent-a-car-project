@@ -33,171 +33,170 @@ import com.oguzhanturk.rentacar.entities.concretes.Rental;
 @Service
 public class RentalManager implements RentalService {
 
-	private final RentalDao rentalDao;
-	private final ModelMapperService modelMapperService;
-	private final CarMaintenanceService carMaintenanceService;
-	private final CarService carService;
-	private final CustomerService customerService;
+    private final RentalDao rentalDao;
+    private final ModelMapperService modelMapperService;
+    private final CarMaintenanceService carMaintenanceService;
+    private final CarService carService;
+    private final CustomerService customerService;
 
-	@Autowired
-	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService,
-			CarMaintenanceService carMaintenanceService, CarService carService, CustomerService customerService) {
-		this.rentalDao = rentalDao;
-		this.modelMapperService = modelMapperService;
-		this.carMaintenanceService = carMaintenanceService;
-		this.carService = carService;
-		this.customerService = customerService;
-	}
+    @Autowired
+    public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService,
+                         CarMaintenanceService carMaintenanceService, CarService carService, CustomerService customerService) {
+        this.rentalDao = rentalDao;
+        this.modelMapperService = modelMapperService;
+        this.carMaintenanceService = carMaintenanceService;
+        this.carService = carService;
+        this.customerService = customerService;
+    }
 
-	@Override
-	public DataResult<List<ListRentalDto>> getAll() {
-		List<Rental> result = rentalDao.findAll();
-		List<ListRentalDto> response = result.stream()
-				.map(rental -> modelMapperService.forDto().map(rental, ListRentalDto.class))
-				.collect(Collectors.toList());
-		return new SuccessDataResult<List<ListRentalDto>>(response, Messages.RENTAL_LIST);
-	}
+    @Override
+    public DataResult<List<ListRentalDto>> getAll() {
+        List<Rental> result = rentalDao.findAll();
+        List<ListRentalDto> response = result.stream()
+                .map(rental -> modelMapperService.forDto().map(rental, ListRentalDto.class))
+                .collect(Collectors.toList());
+        return new SuccessDataResult<List<ListRentalDto>>(response, Messages.RENTAL_LIST);
+    }
 
-	@Override
-	public DataResult<RentalDto> getById(int id) throws BusinessException {
-		checkIfRentalExistsById(id);
-		Rental rental = rentalDao.getById(id);
-		RentalDto response = modelMapperService.forDto().map(rental, RentalDto.class);
-		return new SuccessDataResult<RentalDto>(response, Messages.RENTAL_FOUND);
-	}
+    @Override
+    public DataResult<RentalDto> getById(int id) throws BusinessException {
+        checkIfRentalExistsById(id);
+        Rental rental = rentalDao.getById(id);
+        RentalDto response = modelMapperService.forDto().map(rental, RentalDto.class);
+        return new SuccessDataResult<RentalDto>(response, Messages.RENTAL_FOUND);
+    }
 
-	@Override
-	public Result add(CreateRentalRequest createRentalRequest) throws BusinessException {
+    @Override
+    public Result add(CreateRentalRequest createRentalRequest) throws BusinessException {
 
-		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-		rental.setRentId(0);
+        Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
+        rental.setRentId(0);
 
-		checkIfAvailableForRent(rental);
-		rental.setStartKilometer(carService.getById(createRentalRequest.getCarCarId()).getData().getKilometer());
-		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
+        checkIfAvailableForRent(rental);
+        rental.setStartKilometer(carService.getById(createRentalRequest.getCarCarId()).getData().getKilometer());
+        rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
 
 //		System.out.println(rental.getCustomer());
-		rentalDao.save(rental);
+        rentalDao.save(rental);
 
-		return new SuccessResult(Messages.RENTAL_ADD);
-	}
+        return new SuccessResult(Messages.RENTAL_ADD);
+    }
 
-	@Override
-	public Result update(UpdateRentalRequest updateRentalRequest) throws BusinessException {
+    @Override
+    public Result update(UpdateRentalRequest updateRentalRequest) throws BusinessException {
 
-		checkIfRentalExistsById(updateRentalRequest.getRentId());
+        checkIfRentalExistsById(updateRentalRequest.getRentId());
 
-		Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
+        Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
 //		System.out.println(rental.getCustomer());
 
-		checkIfAvailableForReturn(rental.getCar().getCarId());
+        checkIfAvailableForReturn(rental.getCar().getCarId());
 
-		rental.setStartKilometer(carService.getById(updateRentalRequest.getCarCarId()).getData().getKilometer());
-		rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
-		rental.setRentalTotalPrice(calculateRentalTotalPrice(rental));
+        rental.setStartKilometer(carService.getById(updateRentalRequest.getCarCarId()).getData().getKilometer());
+        rental.setRentalDailyPrice(calculateRentalDailyPrice(rental));
+        rental.setRentalTotalPrice(calculateRentalTotalPrice(rental));
 
-		rentalDao.save(rental);
-		return new SuccessResult(Messages.RENTAL_UPDATE);
-	}
+        rentalDao.save(rental);
+        return new SuccessResult(Messages.RENTAL_UPDATE);
+    }
 
-	@Override
-	public Result delete(DeleteRentalRequest deleteRentalRequest) throws BusinessException {
-		checkIfRentalExistsById(deleteRentalRequest.getRentId());
-		rentalDao.deleteById(deleteRentalRequest.getRentId());
-		return new SuccessResult(Messages.RENTAL_DELETE);
-	}
+    @Override
+    public Result delete(DeleteRentalRequest deleteRentalRequest) throws BusinessException {
+        checkIfRentalExistsById(deleteRentalRequest.getRentId());
+        rentalDao.deleteById(deleteRentalRequest.getRentId());
+        return new SuccessResult(Messages.RENTAL_DELETE);
+    }
 
-	@Override
-	public DataResult<List<ListRentalDto>> getAllByCar(int carId) throws BusinessException {
-		if (!carService.isCarExistsById(carId)) {
-			throw new BusinessException("The car with id : " + carId + " was not found!");
-		}
+    @Override
+    public DataResult<List<ListRentalDto>> getAllByCar(int carId) throws BusinessException {
+        if (!carService.isCarExistsById(carId)) {
+            throw new BusinessException("The car with id : " + carId + " was not found!");
+        }
 
-		List<Rental> result = rentalDao.getAllByCarCarId(carId);
-		List<ListRentalDto> response = result.stream()
-				.map(rental -> modelMapperService.forDto().map(rental, ListRentalDto.class))
-				.collect(Collectors.toList());
-		return new SuccessDataResult<List<ListRentalDto>>(response, Messages.RENTAL_LIST);
-	}
+        List<Rental> result = rentalDao.getAllByCarCarId(carId);
+        List<ListRentalDto> response = result.stream()
+                .map(rental -> modelMapperService.forDto().map(rental, ListRentalDto.class))
+                .collect(Collectors.toList());
+        return new SuccessDataResult<List<ListRentalDto>>(response, Messages.RENTAL_LIST);
+    }
 
-	@Override
-	public boolean isCarAlreadyRented(int carId) {
-		// TODO will be check
-		Rental lastRentalById = rentalDao.findFirstByCarCarIdOrderByRentDate(carId);
-		return Objects.nonNull(lastRentalById) && Objects.isNull(lastRentalById.getReturnDate());
-	}
+    @Override
+    public boolean isCarAlreadyRented(int carId) {
+        // TODO will be check
+        Rental lastRentalById = rentalDao.findFirstByCarCarIdOrderByRentDate(carId);
+        return Objects.nonNull(lastRentalById) && Objects.isNull(lastRentalById.getReturnDate());
+    }
 
-	private void checkIfAvailableForRent(Rental rental) throws BusinessException {
+    private void checkIfAvailableForRent(Rental rental) throws BusinessException {
 
-		if (!customerService.isExistById(rental.getCustomer().getCustomerId())) {
-			throw new BusinessException(Messages.CUSTOMER_NOT_FOUND);
-		}
-		if (!carService.isCarExistsById(rental.getCar().getCarId())) {
-			throw new BusinessException(Messages.CAR_NOT_FOUND);
-		}
-		if (isCarAlreadyRented(rental.getCar().getCarId())) {
-			throw new BusinessException(Messages.CAR_ALREADY_RENTED);
-		}
-		if (carMaintenanceService.isCarInMaintenanceForRent(rental.getCar().getCarId(), rental.getRentDate())) {
-			throw new BusinessException(Messages.CAR_ALREADY_MAINTENANCED);
-		}
+        if (!customerService.isExistById(rental.getCustomer().getCustomerId())) {
+            throw new BusinessException(Messages.CUSTOMER_NOT_FOUND);
+        }
+        if (!carService.isCarExistsById(rental.getCar().getCarId())) {
+            throw new BusinessException(Messages.CAR_NOT_FOUND);
+        }
+        if (isCarAlreadyRented(rental.getCar().getCarId())) {
+            throw new BusinessException(Messages.CAR_ALREADY_RENTED);
+        }
+        if (carMaintenanceService.isCarInMaintenanceForRent(rental.getCar().getCarId(), rental.getRentDate())) {
+            throw new BusinessException(Messages.CAR_ALREADY_MAINTENANCED);
+        }
 
-	}
+    }
 
-	private void checkIfAvailableForReturn(int carId) throws BusinessException {
+    private void checkIfAvailableForReturn(int carId) throws BusinessException {
 
-		if (!carService.isCarExistsById(carId)) {
-			throw new BusinessException(Messages.CAR_NOT_FOUND);
-		}
-	}
+        if (!carService.isCarExistsById(carId)) {
+            throw new BusinessException(Messages.CAR_NOT_FOUND);
+        }
+    }
 
-	private BigDecimal calculateRentalTotalPrice(Rental rental) throws BusinessException {
+    private double calculateRentalTotalPrice(Rental rental) throws BusinessException {
 
-		BigDecimal totalPrice = calculateRentalDailyPrice(rental)
-				.multiply(BigDecimal.valueOf(calculateTotalRentDate(rental)));
+        double totalPrice = calculateRentalDailyPrice(rental) * calculateTotalRentDate(rental);
 
-		if (!isCarReturnSameCity(rental)) {
-			totalPrice.add(BigDecimal.valueOf(750));
-		}
-		return totalPrice;
-	}
+        if (!isCarReturnSameCity(rental)) {
+            totalPrice += 750;
+        }
+        return totalPrice;
+    }
 
-	private BigDecimal calculateRentalDailyPrice(Rental rental) {
-		BigDecimal totalPrice = BigDecimal.valueOf(0);
-		if (Objects.nonNull(rental.getCar().getDailyPrice())) {
-			totalPrice = rental.getCar().getDailyPrice();
-			totalPrice.add(calculateAdditionalServicesDailyPrice(rental.getAdditionalServices()));
-		}
-		return totalPrice;
-	}
+    private double calculateRentalDailyPrice(Rental rental) {
+        double totalPrice = 0;
+        if (Objects.nonNull(rental.getCar().getDailyPrice())) {
+            totalPrice = rental.getCar().getDailyPrice();
+            totalPrice += calculateAdditionalServicesDailyPrice(rental.getAdditionalServices());
+        }
+        return totalPrice;
+    }
 
-	private long calculateTotalRentDate(Rental rental) throws BusinessException {
-		long totalRentDay = Duration.between(rental.getRentDate(), rental.getReturnDate()).toDays();
-		return totalRentDay;
-	}
+    private long calculateTotalRentDate(Rental rental) throws BusinessException {
+        long totalRentDay = Duration.between(rental.getRentDate(), rental.getReturnDate()).toDays();
+        return totalRentDay;
+    }
 
-	private boolean isCarReturnSameCity(Rental rental) {
-		if (rental.getFromCity() != rental.getToCity()) {
-			return false;
-		}
-		return true;
-	}
+    private boolean isCarReturnSameCity(Rental rental) {
+        if (rental.getFromCity() != rental.getToCity()) {
+            return false;
+        }
+        return true;
+    }
 
-	private BigDecimal calculateAdditionalServicesDailyPrice(List<AdditionalService> additionalServices) {
+    private double calculateAdditionalServicesDailyPrice(List<AdditionalService> additionalServices) {
 
-		BigDecimal totalPrice = BigDecimal.valueOf(0);
-		if (Objects.nonNull(additionalServices)) {
-			for (AdditionalService rentedService : additionalServices) {
-				totalPrice.add(rentedService.getAdditionalServiceDailyPrice());
-			}
-		}
-		return totalPrice;
-	}
+        double totalPrice = 0;
+        if (Objects.nonNull(additionalServices)) {
+            for (AdditionalService rentedService : additionalServices) {
+                totalPrice += rentedService.getAdditionalServiceDailyPrice();
+            }
+        }
+        return totalPrice;
+    }
 
-	private void checkIfRentalExistsById(int rentalId) throws BusinessException {
-		if (rentalDao.existsById(rentalId)) {
-			new BusinessException(Messages.RENTAL_NOT_FOUND);
-		}
-	}
+    private void checkIfRentalExistsById(int rentalId) throws BusinessException {
+        if (rentalDao.existsById(rentalId)) {
+            new BusinessException(Messages.RENTAL_NOT_FOUND);
+        }
+    }
 
 }
